@@ -225,9 +225,9 @@ const PaymentModal = ({closeModal}) => {
         total_amount: 2000,
         vat_amount: 0,
         tax_free_amount: 0,
-        approval_url: "http://localhost:3000/paying",
-        fail_url: "http://localhost:3000/paying",
-        cancel_url: "http://localhost:3000/paying",
+        approval_url: "http://buyrricade-client.s3-website.ap-northeast-2.amazonaws.com/paying",
+        fail_url: "http://buyrricade-client.s3-website.ap-northeast-2.amazonaws.com/paying",
+        cancel_url: "http://buyrricade-client.s3-website.ap-northeast-2.amazonaws.com/paying",
       }
     axios.post('https://kapi.kakao.com/v1/payment/ready', params, {
       headers: {
