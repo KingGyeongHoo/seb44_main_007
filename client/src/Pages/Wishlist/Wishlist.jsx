@@ -133,30 +133,31 @@ export default function Wishlist() {
   const [usablePrice, setUsablePrice] = useState(data.useable);
   const [index, setIdx] = useState(0);
   const targetExpend = useSelector(state => state.targetExpend)
-  const wishlist = useSelector(state => state.wishlist)
+  const wishlist = useSelector(state => state.loginMember.loginMember.wishList)
+  console.log(wishlist)
   const useAble = useSelector(state => state.useAble)
   const navigate = useNavigate()
     if (!memberId) {
         navigate("/login");
     }
-  useEffect(() => {
-    axios
-      .get(
-        `${apiUrl.url}/wishlists/${memberId}?tab=lowPrice`,
-        {
-          headers: {
-            'Authorization': localStorage.getItem('Authorization-Token'),
-            'ngrok-skip-browser-warning': '69420',
-            'withCredentials': true,
-          },
-        }
-      )
-      .then((res) => {
-        dispatch(setDataList(res.data))
-      })
-      // .then((res) =>setWishlist({...wishlist, list: res.data}))
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${apiUrl.url}/wishlists/${memberId}?tab=lowPrice`,
+  //       {
+  //         headers: {
+  //           'Authorization': localStorage.getItem('Authorization-Token'),
+  //           'ngrok-skip-browser-warning': '69420',
+  //           'withCredentials': true,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       dispatch(setDataList(res.data))
+  //     })
+  //     // .then((res) =>setWishlist({...wishlist, list: res.data}))
+  //     .catch((err) => console.log(err));
+  // }, []);
   useEffect(() => {
     axios.get(`${apiUrl.url}/totals/${memberId}`,{
       headers: {
@@ -174,21 +175,21 @@ export default function Wishlist() {
   
     setUsablePrice(
       targetExpend -
-        wishlist.list
+        wishlist
           .filter((el) => el.available)
           .reduce((acc, cur) => acc + cur.price, 0)
     );
   }, [targetExpend, wishlist]);
 
   const sortByPriority = () => {
-    const sort = wishlist.list.slice().sort((a, b) => {
+    const sort = wishlist.slice().sort((a, b) => {
       return a.priority - b.priority;
     });
     dispatch(setDataList(sort))
     setIdx(0);
   };
   const sortByDate = () => {
-    const sort = wishlist.list.slice().sort((a, b) => {
+    const sort = wishlist.slice().sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
       return dateA - dateB;
@@ -197,7 +198,7 @@ export default function Wishlist() {
     setIdx(1);
   };
   const sortByPrice = () => {
-    const sort = wishlist.list.slice().sort((a, b) => {
+    const sort = wishlist.slice().sort((a, b) => {
       return a.price - b.price;
     });
     dispatch(setDataList(sort))
@@ -229,7 +230,7 @@ export default function Wishlist() {
   };
 
   const deleteWishlist = (targetWishlist) => {
-    const updatedList = wishlist.list.filter((item) => item !== targetWishlist);
+    const updatedList = wishlist.filter((item) => item !== targetWishlist);
     // setWishlist({ ...wishlist, list: updatedList });
   };
   const editWishlist = (wishlist) => {
@@ -293,7 +294,7 @@ export default function Wishlist() {
             <ListDiv>
               <DndProvider backend={HTML5Backend}>
                 <WishListDragContainer
-                  wishlist={wishlist.list}
+                  wishlist={wishlist}
                   editFunc={editWishlist}
                   deleteFunc={deleteWishlist}
                   // setWishlist={setWishlist}

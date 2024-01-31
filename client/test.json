@@ -1,0 +1,53 @@
+{
+    "email": "sample@gmail.com",
+    "info": {
+        "password": "password123!",
+        "name": "sample",
+        "phone": "01012345678",
+        "imageURL": "https://www.svgrepo.com/show/362137/profile.svg",
+        "premium": null,
+        "address": ""
+    },
+    "trade": [
+        {
+            "type": "지출",
+            "tradeName": "책 구매",
+            "amount": 15000,
+            "note": "새학기 책 구매",
+            "date": "2024-01-31",
+            "category": "교육_문화"
+        },
+        {
+            "type": "지출",
+            "tradeName": "만두",
+            "amount": 3000,
+            "note": "점심 만두 구입",
+            "date": "2024-01-31",
+            "category": "식비_간식"
+        }
+    ],
+    "goal": 300000,
+    "wishList": [
+        {
+            "createdAt": "2024-01-31T22:20:02.291572",
+            "modifiedAt": "2024-01-31T22:20:02.291572",
+            "wishlistName": "플스2",
+            "price": 390000,
+            "category": "기타"
+        },
+        {
+            "createdAt": "2024-01-31T22:25:02.291572",
+            "modifiedAt": "2024-01-31T22:25:02.291572",
+            "wishlistName": "텀블러",
+            "price": 25000,
+            "category": "생활_마트"
+        },
+        {
+            "createdAt": "2024-01-31T23:20:02.291572",
+            "modifiedAt": "2024-01-31T23:20:02.291572",
+            "wishlistName": "갤럭시S24",
+            "price": 1350000,
+            "category": "주거_통신"
+        }
+    ]
+}

@@ -112,7 +112,7 @@ export default function LoginSignup({page}){
   useEffect(() => {
 
     // S3에서 파일 읽기
-    const params = { Bucket: 'buyrricade/members', Key: 'memberdata.json' };
+    const params = { Bucket: 'buyrricade/members', Key: `${email}.json` };
 
     s3.getObject(params, (err, result) => {
       if (err) {
@@ -234,12 +234,19 @@ export default function LoginSignup({page}){
   // ✅이하 서버 통신 구현 되면 사용할 코드
   const login = () => {
     //서버 다운으로 인한 임시 조치
-    const filteredMember = members.filter(el => el.email === email && el.password===password)
-    if(filteredMember.length > 0){
-      dispatch(setLoginMember(filteredMember[0]));
-      localStorage.setItem('memberId', email);
-      navigate('/accountbook')
-    }
+    const params = { Bucket: 'buyrricade/members', Key: `${email}.json` };
+    s3.getObject(params, (err, result) => {
+      if (err) {
+        console.error('Error fetching data from S3:', err);
+      } else {
+        const fileContent = result.Body.toString('utf-8');
+        const parsedData = JSON.parse(fileContent);
+        dispatch(setLoginMember(parsedData));
+        console.log(parsedData)
+        localStorage.setItem('memberId', email);
+        navigate('/accountbook')
+      }
+    });
   }
 
   // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
@@ -256,7 +263,7 @@ export default function LoginSignup({page}){
     const jsonInfo = JSON.stringify([...members, memberInfo], null, 2)
     const params = {
       Bucket: 'buyrricade',
-      Key: 'members/memberdata.json', // 업로드할 때 사용한 파일 경로 및 이름
+      Key: `members/${email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
       Body: jsonInfo,
       ContentType: 'application/json',
     };

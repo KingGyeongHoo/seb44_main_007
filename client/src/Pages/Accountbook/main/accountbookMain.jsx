@@ -21,58 +21,10 @@ const AccountbookMain = () => {
   //유저 정보 받아오기
   // const [memberName, setMemberName] = useState('');
   const s3 = new AWS.S3();
-  // useEffect(() => {
-  //     const fetchMember = async () => {
-  //     try {
-  //         const response = await axios.get(`${apiUrl.url}/members/${memberId}`,{
-  //             headers: {
-  //               'ngrok-skip-browser-warning': '69420',
-  //               'withCredentials': true,
-  //               'Authorization': localStorage.getItem('Authorization-Token'),
-  //             },
-  //           });
-  //           setMemberName(response.data.data.name);
-  //     } catch (error) {
-  //         console.error(error);
-  //     }
-  //     };
-
-  //     fetchMember();
-  // }, []);
-  const memberName = useSelector(state => state.loginMember.name)
-  console.log(memberName)
+  const memberInfo = useSelector(state => state.loginMember.loginMember)
+  const memberName = memberInfo.info.name
   //데이터 받아오기
-  const [accountData, setAccountData] = useState([]);
-  useEffect(() => {
-    //   const getData = async () => {
-    //   try {
-    //       const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-07-01&endDate=2023-07-31`,{
-    //           headers: {
-    //             'ngrok-skip-browser-warning': '69420',
-    //             'withCredentials': true,
-    //             'Authorization': localStorage.getItem('Authorization-Token'),
-    //           },
-    //         });
-    //         setAccountData(response.data);
-    //   } catch (error) {
-    //       console.error(error);
-    //   }
-    // };
-    // getData();
-    // S3에서 파일 읽기
-    const params = { Bucket: 'buyrricade/trades', Key: 'tradedata.json' };
-
-    s3.getObject(params, (err, result) => {
-      if (err) {
-        console.error('Error fetching data from S3:', err);
-      } else {
-        const fileContent = result.Body.toString('utf-8');
-        const parsedData = JSON.parse(fileContent).filter(el => el.member === memberId);
-        console.log(parsedData)
-        setAccountData(parsedData);
-      }
-    });
-  }, []);
+  const accountData = memberInfo.trade
 
   const dispatch = useDispatch();
   // const targetExpend = useSelector((state) => state.targetExpend);

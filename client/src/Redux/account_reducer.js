@@ -5,7 +5,7 @@ const expendSlice = createSlice({
   name: 'totalExpend',
   initialState: 0,
   reducers: {
-    totalExpend : (state, action) => action.payload,
+    totalExpend : (state, action) => parseInt(action.payload),
   },
 })
 
@@ -17,7 +17,7 @@ const profitSlice = createSlice({
   name: 'totalProfit',
   initialState: 0,
   reducers: {
-    totalProfit : (state, action) => action.payload,
+    totalProfit : (state, action) => parseInt(action.payload),
   },
 })
 

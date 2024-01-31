@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  loginMember: null, // 초기 값은 null로 설정합니다.
+  loginMember: {}
 };
 
 const loginMemberSlice = createSlice({
