@@ -87,7 +87,8 @@ const DeleteImg = styled.img`
 
 const WishLists = ({ list, index, moveList, editFunc, avail }) => {
   const memberId = localStorage.getItem('memberId')
-  const updatedListsWithNewPriority = useSelector(state => state.wishlist)
+  const updatedListsWithNewPriority = useSelector(state => state.wishlist.list)
+  console.log(updatedListsWithNewPriority)
   const ref = useRef(null);
   const handleDelete = () => {
     axios
@@ -187,7 +188,7 @@ export default function WishListDragContainer({
 }) {
   const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
-
+  console.log(wishlist)
   const moveList = (dragIndex, hoverIndex) => {
     const draggedList = wishlist[dragIndex];
     const updatedLists = wishlist.slice();
@@ -201,7 +202,8 @@ export default function WishListDragContainer({
     dispatch(setDataList(updatedListsWithNewPriority));
   };
 
-  const targetExpend = useSelector((state) => state.targetExpend);
+  const targetExpend = useSelector(state => state.loginMember.loginMember.goal)
+
   let sum = 0
   const availableWishlist = wishlist.map(list => {
     if(list.price + sum < targetExpend){

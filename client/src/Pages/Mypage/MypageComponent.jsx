@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import {useSelector} from 'react-redux'
 import { styled } from 'styled-components'
 import axios from 'axios'
 import userImage from '../../Images/user.JPG'
@@ -11,27 +12,8 @@ const PremiumImg = "https://www.svgrepo.com/show/485696/diamond.svg" //다이아
 const MypageComponent = () => {
     const memberId = localStorage.getItem('memberId')
     //유저 데이터 받아오기
-    const [member, setMember] = useState(''); //useState(null)
+    const member = useSelector(state => state.loginMember.loginMember.info)
 
-    useEffect(() => {
-        const fetchMember = async () => {
-        try {
-            const response = await axios.get(`${apiUrl.url}/members/${memberId}`,{
-                headers: {
-                  'ngrok-skip-browser-warning': '69420',
-                  'withCredentials': true,
-                  'Authorization': localStorage.getItem('Authorization-Token'),
-                },
-              });
-            setMember(response.data.data);
-        } catch (error) {
-            console.error(error);
-        }
-        };
-
-        fetchMember();
-    }, []);
-    
     //이미지 수정
     const imgRef = useRef(null);
     const [profileImage,setProfileImage] = useState(userImage);
@@ -115,7 +97,6 @@ const MypageComponent = () => {
                 'Authorization': localStorage.getItem('Authorization-Token'),
               },
           });
-          setMember(updatedMember);
           setIsEdit(!isEdit);
         } catch (error) {
           console.error(error);

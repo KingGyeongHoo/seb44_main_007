@@ -3,10 +3,9 @@ import { styled } from 'styled-components'
 import { CategoryCircle } from './Wishlists'
 import { LimitInput } from './Wishlist'
 import Palette from "../../Palette/Palette";
-import { useSelector } from 'react-redux';
-import apiUrl from '../../API_URL';
-import axios from "axios"
-
+import { useSelector, useDispatch } from 'react-redux';
+import {setLoginMember} from "../../Redux/loginMemberReducer";
+import AWS from 'aws-sdk'
 export const ModalBackground = styled.div`
   position: absolute;
   top: 0;
@@ -89,44 +88,48 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
     setOpenModal(false)
   }
 
+  const s3 = new AWS.S3()
+  const dispatch = useDispatch()
+  const info = useSelector(state => state.loginMember.loginMember)
   const category = ['식비_간식','주거_통신','교통_차량','생활_마트','의류_미용','의료_건강','교육_문화','보험_세금']
   const [addCategory, setAddCategory] = useState()
   const [addName, setAddName] = useState()
   const [addPrice, setAddPrice] = useState()
 
-  // const date = new Date()
-  // const year = date.getFullYear();
-  // const month = String(date.getMonth() + 1).padStart(2, '0');
-  // const day = String(date.getDate()).padStart(2, '0');
-  // const today = `${year}.${month}.${day}`;
+  const date = new Date()
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const today = `${year}-${month}-${day}`;
   const wishlist = useSelector(state => state.wishlist)
 
   const memberId = localStorage.getItem('memberId')
   const addWishlist = () =>{
     const newWishlist = {
+      "createdAt": today,
+      "modifiedAt": today,
       "wishlistName": addName,
       "price": Number(addPrice),
       "category": addCategory,
-      "priority": wishlist.list.length
+      "priority": wishlist.list.length + 1
       }
-      axios.post(`${apiUrl.url}/wishlists/${memberId}`,
-      newWishlist,
-      {
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-          'ngrok-skip-browser-warning': '69420',
-          'withCredentials': true,
-        },
-      }
-      )
-      .then(res => {
-        console.log(res)
-        window.location.reload()
-        setAddCategory()
-        setAddName()
-        setAddPrice()
-      })
-      .catch(err => console.log(err))
+      const newInfo = {...info, wishList:[...info.wishList, newWishlist]}
+      const jsonInfo = JSON.stringify(newInfo, null, 2)
+      const params = {
+        Bucket: 'buyrricade',
+        Key: `members/${info.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+        Body: jsonInfo,
+        ContentType: 'application/json',
+        };
+        s3.upload(params, (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err);
+        } else {
+            console.log('File uploaded successfully:', data);
+            dispatch(setLoginMember(newInfo));
+            close()
+        }
+        });
   }
   const wishlistId = useSelector((state) => state.id.id);
   const editWishlist = () => {
@@ -135,28 +138,27 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
       'price': Number(addPrice),
       'category': addCategory,
     }
-    // const updatedWishlist = wishlist.list.map(el => {
-    //   if (el.priority === editedWishlist.priority) {
-    //     return editedWishlist; // priority가 같은 경우 대체
-    //   }
-    //     return el; // 그 외의 경우는 원래 항목 유지
-    // });
-    axios
-    .patch(`${apiUrl.url}/wishlists/${wishlistId}/${memberId}`,
-    editedWishlist,
-    {
-      headers: {
-        'Authorization': localStorage.getItem('Authorization-Token'),
-        'ngrok-skip-browser-warning': '69420',
-        'withCredentials': true,
-      },
-    }
-    ).then(res => console.log(res))
-    .catch(err => console.log(err))
-    setTimeout(() => window.location.reload(), 1000)
-    setAddCategory()
-    setAddName()
-    setAddPrice()
+    const newInfo = {...info, wishList:[...info.wishList, editedWishlist]}
+      const jsonInfo = JSON.stringify(newInfo, null, 2)
+      const params = {
+        Bucket: 'buyrricade',
+        Key: `members/${info.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+        Body: jsonInfo,
+        ContentType: 'application/json',
+        };
+        s3.upload(params, (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err);
+        } else {
+            console.log('File uploaded successfully:', data);
+            dispatch(setLoginMember(newInfo));
+            setAddCategory()
+            setAddName()
+            setAddPrice()
+            close()
+        }
+        });
+    
   }
   return(
     <ModalBackground onClick={close}>

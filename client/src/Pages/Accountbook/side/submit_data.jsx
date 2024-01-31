@@ -4,12 +4,16 @@ import {styled} from "styled-components";
 import { addAccountData } from '../../../Redux/submit_data_reducer';
 import DropdownExpend from './category_dropdown_expend';
 import DropdownProfit from './category_dropdown_profit';
+import {setLoginMember} from "../../../Redux/loginMemberReducer";
+import AWS from 'aws-sdk'
 
 import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
 const SubmitData = () => {
+    const s3 = new AWS.S3()
     const memberId = localStorage.getItem('memberId')
+    const info = useSelector(state => state.loginMember.loginMember)
 
     //날짜
     const selectedDate = useSelector((state) => state.selectedDate);
@@ -74,18 +78,25 @@ const SubmitData = () => {
             date: formatDate(currentDate),
             category: selectedOption ? selectedOption.label : '',
         };
-        axios.post(`${apiUrl.url}/trades/${memberId}`,inputData,{
-            headers: {
-              'Authorization': localStorage.getItem('Authorization-Token'),
-            },
-        })
-        .then(res=> {
-            console.log(res)
-            window.location.reload()
+        const newInfo = {...info, trade:[...info.trade, inputData]}
+        const jsonInfo = JSON.stringify(newInfo, null, 2)
+        const params = {
+        Bucket: 'buyrricade',
+        Key: `members/${info.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+        Body: jsonInfo,
+        ContentType: 'application/json',
+        };
+        s3.upload(params, (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err);
+        } else {
+            console.log('File uploaded successfully:', data);
+            dispatch(setLoginMember(newInfo));
             setAmountInput('');
             setTradeName('');
             setNoteInput('');
-        })
+        }
+        });
     };
     
     return (

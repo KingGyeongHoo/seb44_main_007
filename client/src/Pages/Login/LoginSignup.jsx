@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {setLoginMember} from "../../Redux/loginMemberReducer";
 import AWS from 'aws-sdk';
-import axios from 'axios';
-import apiUrl from '../../API_URL';
 
 const Container = styled.div`
   width: 100%;

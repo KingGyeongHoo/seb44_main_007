@@ -97,25 +97,7 @@ const AccountbookMain = () => {
 
 
   // 목표 지출 금액 서버에서 받아오기
-  const [amountGoal, setAmountGoal] = useState(10);
-
-  useEffect(() => {
-    const getAmountGoal = async () => {
-      try {
-        const response = await axios.get(`${apiUrl.url}/totals/${memberId}`, {
-          headers: {
-            'ngrok-skip-browser-warning': '69420',
-            'withCredentials': true,
-            'Authorization': localStorage.getItem('Authorization-Token'),
-          },
-        });
-        setAmountGoal(response.data[0].goal);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getAmountGoal()
-  }, [memberId]);
+  const amountGoal = useSelector(state => state.loginMember.loginMember.goal)
   
     return (
       <>

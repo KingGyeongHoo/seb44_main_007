@@ -132,7 +132,6 @@ export default function Wishlist() {
   const memberId = localStorage.getItem('memberId')
   const [usablePrice, setUsablePrice] = useState(data.useable);
   const [index, setIdx] = useState(0);
-  const targetExpend = useSelector(state => state.targetExpend)
   const wishlist = useSelector(state => state.loginMember.loginMember.wishList)
   console.log(wishlist)
   const useAble = useSelector(state => state.useAble)
@@ -158,18 +157,7 @@ export default function Wishlist() {
   //     // .then((res) =>setWishlist({...wishlist, list: res.data}))
   //     .catch((err) => console.log(err));
   // }, []);
-  useEffect(() => {
-    axios.get(`${apiUrl.url}/totals/${memberId}`,{
-      headers: {
-        'Authorization': localStorage.getItem('Authorization-Token'),
-        'ngrok-skip-browser-warning': '69420',
-        'withCredentials': true,
-      },
-    })
-    .then(res => dispatch(setTargetExpend(res.data[0].goal)))
-    .catch(err => console.log(err))
-  }, [])
-
+  const targetExpend = useSelector(state => state.loginMember.loginMember.goal)
   useEffect(() => {
     let sum = 0;
   
@@ -194,6 +182,7 @@ export default function Wishlist() {
       const dateB = new Date(b.date);
       return dateA - dateB;
     });
+
     dispatch(setDataList(sort))
     setIdx(1);
   };
@@ -201,6 +190,7 @@ export default function Wishlist() {
     const sort = wishlist.slice().sort((a, b) => {
       return a.price - b.price;
     });
+    console.log(sort)
     dispatch(setDataList(sort))
     console.log('금액순 정렬 한 위시리스트는')
     console.log(wishlist)

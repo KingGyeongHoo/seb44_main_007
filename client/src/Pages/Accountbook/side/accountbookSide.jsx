@@ -10,31 +10,7 @@ const AccountbookSide = () => {
     const memberId = localStorage.getItem('memberId')
 
   // 목표 지출 금액 서버에서 받아오기
-  const [amountGoal, setAmountGoal] = useState(0);
-
-  useEffect(() => {
-    const getAmountGoal = async () => {
-      try {
-        const response = await axios.get(apiUrl.url + '/totals/' + memberId, {
-          headers: {
-            'ngrok-skip-browser-warning': '69420',
-            'withCredentials': true,
-            'Authorization': localStorage.getItem('Authorization-Token'),
-          },
-        });
-        if(response.data[0].goal === undefined){
-            setAmountGoal(0);
-        } else {
-            setAmountGoal(response.data[0].goal);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    getAmountGoal();
-    
-  }, []);
+  const amountGoal = useSelector(state => state.loginMember.loginMember.goal)
     
     const targetExpend = () => {
         if(amountGoal === 0){
@@ -90,8 +66,7 @@ const AccountbookSide = () => {
     }, []);
 
     // 일별 총 수입/지출
-    // const accountDataList = useSelector((state) => state.accountData.accountDataList); 
-    const accountDataList = accountData; 
+    const accountDataList = useSelector(state => state.loginMember.loginMember.trade)
     const calTotalProfit = Array.isArray(accountDataList)
         ? accountDataList.filter((item) => item.type === '수입' && item.date === formatDate(currentDate))
             .reduce((sum, item) => sum + item.amount, 0)

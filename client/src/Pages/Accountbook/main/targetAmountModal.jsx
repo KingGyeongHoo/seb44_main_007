@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import {useSelector, useDispatch} from 'react-redux'
 import { styled } from 'styled-components';
+import {setLoginMember} from "../../../Redux/loginMemberReducer";
+import AWS from 'aws-sdk'
 
 import axios from 'axios'
 import apiUrl from '../../../API_URL';
@@ -8,6 +11,8 @@ const TargetAmountModal = () => {
   
   const memberId = localStorage.getItem('memberId')
   const [memberData, setMemberData] = useState([])
+  const dispatch = useDispatch()
+  const s3 = new AWS.S3();
   useEffect(() => {
      axios.get(`${apiUrl.url}/totals/${memberId}`,{
       headers: {
@@ -51,31 +56,26 @@ const TargetAmountModal = () => {
     setInputTarget(parseInt(numerValue));
   };
 
+  const info = useSelector(state => state.loginMember.loginMember)
   const handleTarget = () => {
-    const inputData = {
-      goal: inputTarget,
+    const newInfo = {...info, goal: inputTarget}
+    const jsonInfo = JSON.stringify(newInfo, null, 2)
+    const params = {
+      Bucket: 'buyrricade',
+      Key: `members/${info.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+      Body: jsonInfo,
+      ContentType: 'application/json',
     };
-    if(memberData === ''){
-      axios.post(`${apiUrl.url}/totals/${memberId}`,inputData,{
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-        },
-      })
-      .then(res => {
-        console.log(res)
-        window.location.reload()
-      })
-    } else {
-      axios.patch(`${apiUrl.url}/totals/${memberId}`,inputData,{
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-        },
-      })
-      .then(res => {
-        console.log(res)
-        window.location.reload()
-      })
-    }
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.error('Error uploading file:', err);
+      } else {
+        console.log('File uploaded successfully:', data);
+        dispatch(setLoginMember(newInfo));
+        closeModal()
+      }
+    });
+    
   };
 
   return (
