@@ -12,7 +12,7 @@ import Paying from "./Pages/Premium/Paying";
 import SideNavBar from "./Pages/Home/SideNavBar";
 import Analysis from "./Pages/Analysis/Analysis";
 import Mypage from "./Pages/Mypage/Mypage";
-
+import AWS from 'aws-sdk'
 //dummyData
 import { data } from "./InitData/data";
 //redux
@@ -21,6 +21,11 @@ import { setfetchData } from "./Redux/reducers";
 
 function App() {
   const dispatch = useDispatch();
+  AWS.config.update({
+    region: process.env.REACT_APP_region,
+    accessKeyId: process.env.REACT_APP_accessKeyId,
+    secretAccessKey: process.env.REACT_APP_secretAccessKey
+  });
 
   useEffect(() => {
     dispatch(setfetchData(data));

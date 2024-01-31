@@ -1,7 +1,10 @@
 import { styled } from 'styled-components'
 import { SignupButton } from '../Home/Home'
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
+import {setLoginMember} from "../../Redux/loginMemberReducer";
+import AWS from 'aws-sdk';
 import axios from 'axios';
 import apiUrl from '../../API_URL';
 
@@ -103,7 +106,24 @@ const DirectLinkSpan = styled.span`
 `
 
 export default function LoginSignup({page}){
+  const [members, setMemebrs] = useState([])
+  const dispatch = useDispatch();
+  const s3 = new AWS.S3();
+  useEffect(() => {
 
+    // S3에서 파일 읽기
+    const params = { Bucket: 'buyrricade/members', Key: 'memberdata.json' };
+
+    s3.getObject(params, (err, result) => {
+      if (err) {
+        console.error('Error fetching data from S3:', err);
+      } else {
+        const fileContent = result.Body.toString('utf-8');
+        const parsedData = JSON.parse(fileContent);
+        setMemebrs(parsedData);
+      }
+    });
+  }, []);
   const [email, setEmail] = useState("");
   const [emailValidMessage, setEmailValidMessage] = useState("");
 
@@ -153,11 +173,6 @@ export default function LoginSignup({page}){
         setEmailValidMessage("올바르지 않은 이메일 형식입니다");
         return false
       }
-      // ✅서버통신 구현되면 지울 코드
-      // else if (memberdata.filter(el => el.email === email).length < 1) {
-      //   setEmailValidMessage("등록되지 않은 이메일입니다");
-      //   return false
-      // }
       else {
         setEmailValidMessage("");
       }
@@ -169,11 +184,6 @@ export default function LoginSignup({page}){
         setPwValidMessage("비밀번호는 특수문자와 문자, 숫자를 포함해 10자 이상이어야 합니다");
         return false
       } 
-      // ✅서버통신 구현되면 지울 코드
-      // else if (memberdata.filter(el => el.email === email)[0].password !== password) {
-      //   setPwValidMessage("비밀번호가 틀립니다!");
-      //   return false
-      // } 
       else {
         setPwValidMessage("");
       }
@@ -182,11 +192,6 @@ export default function LoginSignup({page}){
         setNicknameValidMessage("닉네임을 입력하세요");
         return false
       }
-      // ✅서버통신 구현되면 지울 코드
-      // else if (memberdata.filter(el => el.name === nickname).length > 0) {
-      //   setNicknameValidMessage("다른 회원님이 사용중인 닉네임입니다");
-      //   return false
-      // }
       else {
         setNicknameValidMessage("");
       }
@@ -198,11 +203,6 @@ export default function LoginSignup({page}){
         setEmailValidMessage("올바르지 않은 이메일 형식입니다");
         return false
       }
-      // ✅서버통신 구현되면 지울 코드
-      // else if (memberdata.filter(el => el.email === email).length > 0) {
-      //   setEmailValidMessage("이미 존재하는 이메일입니다");
-      //   return false
-      // }
       else {
         setEmailValidMessage("");
       }
@@ -231,27 +231,15 @@ export default function LoginSignup({page}){
 
     return true
   }
-
   // ✅이하 서버 통신 구현 되면 사용할 코드
   const login = () => {
-    const memberInfo = {
-      email: email,
-      password: password,
-    }
-    axios
-    .post(`${apiUrl.url}/login`, memberInfo)
-    .then(res => {
-      console.log(res)
-      localStorage.setItem('memberId', res.headers.memberid);
-      localStorage.setItem('Authorization-Token', res.headers.authorization)
-      localStorage.setItem('Refresh-Token', res.headers.refresh)
+    //서버 다운으로 인한 임시 조치
+    const filteredMember = members.filter(el => el.email === email && el.password===password)
+    if(filteredMember.length > 0){
+      dispatch(setLoginMember(filteredMember[0]));
+      localStorage.setItem('memberId', email);
       navigate('/accountbook')
-    })
-    .catch(err =>{
-      console.log(err)
-      setEmailValidMessage('이메일과 비밀번호를 확인해주세요')
-      setPwValidMessage('이메일과 비밀번호를 확인해주세요')
-    })
+    }
   }
 
   // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
@@ -265,14 +253,22 @@ export default function LoginSignup({page}){
       premium: null,
       address: ''
     }
-    axios
-    .post(`${apiUrl.url}/members`, memberInfo)
-    .then(res => {
-      navigate('/login')
-    })
-    .catch(err =>{
-      console.log(err)
-    })
+    const jsonInfo = JSON.stringify([...members, memberInfo], null, 2)
+    const params = {
+      Bucket: 'buyrricade',
+      Key: 'members/memberdata.json', // 업로드할 때 사용한 파일 경로 및 이름
+      Body: jsonInfo,
+      ContentType: 'application/json',
+    };
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.error('Error uploading file:', err);
+      } else {
+        console.log('File uploaded successfully:', data);
+        alert("회원가입에 성공하였습니다.")
+        navigate('/login')
+      }
+    });
   }
 
   const navigate = useNavigate()
