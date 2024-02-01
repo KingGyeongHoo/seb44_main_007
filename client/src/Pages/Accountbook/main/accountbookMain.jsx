@@ -42,7 +42,8 @@ const AccountbookMain = () => {
     setActiveTab(tabIndex);
   };
 
-  
+  const sortedWishlist = useSelector(state => state.wishlist.list)
+  console.log(sortedWishlist)
   //날짜
   const selectedDate = useSelector((state) => state.selectedDate);
   

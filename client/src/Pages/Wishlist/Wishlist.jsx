@@ -133,30 +133,12 @@ export default function Wishlist() {
   const [usablePrice, setUsablePrice] = useState(data.useable);
   const [index, setIdx] = useState(0);
   const wishlist = useSelector(state => state.loginMember.loginMember.wishList)
-  console.log(wishlist)
+  
   const useAble = useSelector(state => state.useAble)
   const navigate = useNavigate()
     if (!memberId) {
         navigate("/login");
     }
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `${apiUrl.url}/wishlists/${memberId}?tab=lowPrice`,
-  //       {
-  //         headers: {
-  //           'Authorization': localStorage.getItem('Authorization-Token'),
-  //           'ngrok-skip-browser-warning': '69420',
-  //           'withCredentials': true,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       dispatch(setDataList(res.data))
-  //     })
-  //     // .then((res) =>setWishlist({...wishlist, list: res.data}))
-  //     .catch((err) => console.log(err));
-  // }, []);
   const targetExpend = useSelector(state => state.loginMember.loginMember.goal)
   useEffect(() => {
     let sum = 0;
@@ -190,12 +172,10 @@ export default function Wishlist() {
     const sort = wishlist.slice().sort((a, b) => {
       return a.price - b.price;
     });
-    console.log(sort)
     dispatch(setDataList(sort))
-    console.log('금액순 정렬 한 위시리스트는')
-    console.log(wishlist)
     setIdx(2);
   };
+  const sortedWishlist = useSelector(state => state.wishlist.list)
   const buttons = [
     {
       title: "우선순위순",
@@ -284,7 +264,7 @@ export default function Wishlist() {
             <ListDiv>
               <DndProvider backend={HTML5Backend}>
                 <WishListDragContainer
-                  wishlist={wishlist}
+                  wishlist={sortedWishlist}
                   editFunc={editWishlist}
                   deleteFunc={deleteWishlist}
                   // setWishlist={setWishlist}

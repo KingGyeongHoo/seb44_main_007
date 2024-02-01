@@ -219,6 +219,7 @@ export default function WishListDragContainer({
       }
     }
   })
+  console.log(availableWishlist)
   useEffect(() => {
     dispatch(setUseAble(targetExpend - sum))
   }, [targetExpend, availableWishlist])
@@ -233,7 +234,7 @@ export default function WishListDragContainer({
               moveList={moveList}
               editFunc={editFunc}
               key={el.priority}
-            ></WishLists>
+            >{idx}</WishLists>
           );
         })}
     </WishUl>

@@ -1,3 +1,5 @@
+import storage from 'redux-persist/lib/storage'
+import { persistReducer } from 'redux-persist';
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import dataSlice from "./reducers";
 import { expendReducer, profitReducer, targetReducer,  } from './account_reducer';
@@ -7,6 +9,12 @@ import idReducer from './id_reducer'; // 새로운 slice를 추가합니다.
 import { wishListReducer, useableReducer } from './wishlist_reducer';
 import paymentReducer from './payment_reducer'; // 새로운 slice를 추가합니다.
 import loginMemberReducer from './loginMemberReducer'
+
+const persistConfig = {
+  key: "root", // localStorage key 
+  storage, // localStorage
+  whitelist: ["loginMember"], // target (reducer name)
+}
 
 const rootReducer = combineReducers({
   data: dataSlice,
@@ -22,8 +30,10 @@ const rootReducer = combineReducers({
   loginMember: loginMemberReducer
 });
 
+const persReducer = persistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persReducer,
 });
 
 export default store;
