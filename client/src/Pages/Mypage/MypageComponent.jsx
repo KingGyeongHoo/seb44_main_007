@@ -138,20 +138,20 @@ const MypageComponent = () => {
         setUnsubModalIsOpen(false);
     };
 
-    const unsubscribe = () => {
-        axios.patch(`${apiUrl.url}/members/${memberId}`, { premium: false }, {
-            headers: {
-              'Authorization': localStorage.getItem('Authorization-Token'),
-              'ngrok-skip-browser-warning': '69420',
-              'withCredentials': true,
-            },
-          })
-          .then(res => {
-            alert('구독 해지되었습니다')
-            window.location.reload()
-          })
-          .catch(err => console.log(err))
-    };
+    // const unsubscribe = () => {
+    //     axios.patch(`${apiUrl.url}/members/${memberId}`, { premium: false }, {
+    //         headers: {
+    //           'Authorization': localStorage.getItem('Authorization-Token'),
+    //           'ngrok-skip-browser-warning': '69420',
+    //           'withCredentials': true,
+    //         },
+    //       })
+    //       .then(res => {
+    //         alert('구독 해지되었습니다')
+    //         window.location.reload()
+    //       })
+    //       .catch(err => console.log(err))
+    // };
 
     return (
         <MyPage>
