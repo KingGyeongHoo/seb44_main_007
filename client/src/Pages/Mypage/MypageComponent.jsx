@@ -138,20 +138,24 @@ const MypageComponent = () => {
         setUnsubModalIsOpen(false);
     };
 
-    // const unsubscribe = () => {
-    //     axios.patch(`${apiUrl.url}/members/${memberId}`, { premium: false }, {
-    //         headers: {
-    //           'Authorization': localStorage.getItem('Authorization-Token'),
-    //           'ngrok-skip-browser-warning': '69420',
-    //           'withCredentials': true,
-    //         },
-    //       })
-    //       .then(res => {
-    //         alert('구독 해지되었습니다')
-    //         window.location.reload()
-    //       })
-    //       .catch(err => console.log(err))
-    // };
+    const unsubscribe = () => {
+        const newInfo = {...memberInfo, info: {...memberInfo.info, premiun: false}}
+        const jsonInfo = JSON.stringify(newInfo, null, 2)
+        const params = {
+        Bucket: 'buyrricade',
+        Key: `members/${memberInfo.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+        Body: jsonInfo,
+        ContentType: 'application/json',
+        };
+        s3.upload(params, (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err);
+        } else {
+            dispatch(setLoginMember(newInfo));
+            window.location.reload()
+        }
+        });
+    };
 
     return (
         <MyPage>
@@ -163,7 +167,7 @@ const MypageComponent = () => {
                             type="file" 
                             ref={imgRef} 
                             style={{ display: "none" }} 
-                            onChange={handleImageUpload} />
+                             />
                         <ProfileImageChange onClick={handleProfileImageChange}>
                             프로필 사진 변경
                         </ProfileImageChange>
