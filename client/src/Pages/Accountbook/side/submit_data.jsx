@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {styled} from "styled-components";
-import { addAccountData } from '../../../Redux/submit_data_reducer';
 import DropdownExpend from './category_dropdown_expend';
 import DropdownProfit from './category_dropdown_profit';
 import {setLoginMember} from "../../../Redux/loginMemberReducer";
 import AWS from 'aws-sdk'
-
-import axios from 'axios'
-import apiUrl from '../../../API_URL';
 
 const SubmitData = () => {
     const s3 = new AWS.S3()
@@ -90,7 +86,6 @@ const SubmitData = () => {
         if (err) {
             console.error('Error uploading file:', err);
         } else {
-            console.log('File uploaded successfully:', data);
             dispatch(setLoginMember(newInfo));
             setAmountInput('');
             setTradeName('');

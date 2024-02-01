@@ -3,12 +3,7 @@ import {styled} from "styled-components";
 import { useSelector } from 'react-redux';
 import SubmitData from "./submit_data";
 
-import axios from 'axios'
-import apiUrl from '../../../API_URL';
-
 const AccountbookSide = () => {
-    const memberId = localStorage.getItem('memberId')
-
   // 목표 지출 금액 서버에서 받아오기
   const amountGoal = useSelector(state => state.loginMember.loginMember.goal)
     
@@ -44,26 +39,6 @@ const AccountbookSide = () => {
     }
     const currentDate = selectedDate.selectedDate;
 
-    //데이터 받아오기
-    const [accountData, setAccountData] = useState([]);
-
-    useEffect(() => {
-        const getData = async () => {
-        try {
-             const response = await axios.get(apiUrl.url + '/trades/' + memberId + '?startDate=2023-07-01&endDate=2023-07-31',{
-                  headers: {
-                    'ngrok-skip-browser-warning': '69420',
-                    'withCredentials': true,
-                    'Authorization': localStorage.getItem('Authorization-Token'),
-                },
-            });
-            setAccountData(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getData();
-    }, []);
 
     // 일별 총 수입/지출
     const accountDataList = useSelector(state => state.loginMember.loginMember.trade)

@@ -273,7 +273,6 @@ function Analysis() {
       }
     }
   };
-  console.log(accountData)
   return (
     <AnalysisPage>    
       <PageTop>

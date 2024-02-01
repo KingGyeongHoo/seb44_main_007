@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectDate } from '../../../Redux/date_reducer';
 import { format, addMonths, subMonths } from 'date-fns';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
@@ -7,9 +7,6 @@ import { isSameMonth, isSameDay, addDays } from 'date-fns';
 import { styled } from 'styled-components';
 import leftIcon from '../../../Images/left_arrow.png'
 import rightIcon from '../../../Images/right_arrow.png'
-
-import axios from 'axios'
-import apiUrl from '../../../API_URL';
 
 const RenderDays = () => {
 
@@ -26,9 +23,7 @@ const RenderDays = () => {
     return <DayWeek>{days}</DayWeek>;  
 };
 
-export const Calender = () => {
-    const memberId = localStorage.getItem('memberId')
-    
+export const Calender = () => {    
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -59,25 +54,9 @@ export const Calender = () => {
 
     //데이터 받아오기
     // const accountDataList = useSelector((state) => state.accountData.accountDataList); 
-    const [accountData, setAccountData] = useState([]);
+    // const [accountData, setAccountData] = useState([]);
 
-    useEffect(() => {
-        const getData = async () => {
-        try {
-             const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-07-01&endDate=2023-07-31`,{
-                  headers: {
-                    'ngrok-skip-browser-warning': '69420',
-                    'withCredentials': true,
-                    'Authorization': localStorage.getItem('Authorization-Token'),
-                },
-            });
-            setAccountData(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getData();
-    }, []);
+    const accountData = useSelector(state => state.loginMember.loginMember.trade)
 
     //데이터 리듀스
     const accountDataList = accountData;

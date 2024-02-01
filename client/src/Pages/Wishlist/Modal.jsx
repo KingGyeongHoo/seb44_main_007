@@ -103,7 +103,6 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
   const today = `${year}-${month}-${day}`;
   const wishlist = useSelector(state => state.wishlist)
 
-  const memberId = localStorage.getItem('memberId')
   const addWishlist = () =>{
     const newWishlist = {
       "createdAt": today,
@@ -125,13 +124,12 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
         if (err) {
             console.error('Error uploading file:', err);
         } else {
-            console.log('File uploaded successfully:', data);
             dispatch(setLoginMember(newInfo));
             close()
+            window.location.reload()
         }
         });
   }
-  const wishlistId = useSelector((state) => state.id.id);
   const editWishlist = () => {
     const editedWishlist = {
       'wishlistName': addName,

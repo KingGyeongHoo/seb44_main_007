@@ -3,14 +3,13 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { setDataList } from "../../Redux/wishlist_reducer";
-import { setTargetExpend } from "../../Redux/account_reducer";
+import {setLoginMember} from "../../Redux/loginMemberReducer";
 import { data } from "../../InitData/wishlist";
 import Modal from "./Modal";
 import WishListDragContainer from "./Wishlists";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import apiUrl from '../../API_URL';
-import axios from "axios";
+import AWS from 'aws-sdk'
 
 const WishlistContainer = styled.div`
   width: calc(100% - 300px);
@@ -132,8 +131,32 @@ export default function Wishlist() {
   const memberId = localStorage.getItem('memberId')
   const [usablePrice, setUsablePrice] = useState(data.useable);
   const [index, setIdx] = useState(0);
-  const wishlist = useSelector(state => state.loginMember.loginMember.wishList)
+  const loginMember = useSelector(state => state.loginMember.loginMember)
+  const wishlist = loginMember.wishList
+  const savedList = useSelector(state => state.wishlist.list)
+  useEffect(() => {
+    dispatch(setDataList(wishlist))
+  }, [])
   
+  const s3 = new AWS.S3()
+  useEffect(() => {
+    const newInfo = {...loginMember, wishList: savedList}
+    const jsonInfo = JSON.stringify(newInfo, null, 2)
+    const params = {
+      Bucket: 'buyrricade',
+      Key: `members/${newInfo.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+      Body: jsonInfo,
+      ContentType: 'application/json',
+    };
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.error('Error uploading file:', err);
+      } else {
+        dispatch(setLoginMember(newInfo))
+      }
+    });
+  }, [savedList])
+
   const useAble = useSelector(state => state.useAble)
   const navigate = useNavigate()
     if (!memberId) {

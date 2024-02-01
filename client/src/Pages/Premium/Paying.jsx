@@ -28,7 +28,6 @@ export default function Paying() {
       },
     })
     .then(res => {
-      console.log(res);
       return axios.get(`${apiUrl.url}/members/${memberId}`, {
         headers: {
           'Authorization': localStorage.getItem('Authorization-Token'),
@@ -48,7 +47,6 @@ export default function Paying() {
       });
     })
     .then(res => {
-      console.log(res);
       dispatch(setPayment(true))
       window.close();
       alert('결제되었습니다!')

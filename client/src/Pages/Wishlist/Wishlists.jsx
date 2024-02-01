@@ -1,12 +1,11 @@
 import { styled } from "styled-components";
 import Palette from "../../Palette/Palette";
 import { useDrop, useDrag } from "react-dnd";
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { setId } from "../../Redux/id_reducer";
 import { setDataList, setUseAble } from "../../Redux/wishlist_reducer";
-import apiUrl from '../../API_URL';
-import axios from "axios"
+import {setLoginMember} from "../../Redux/loginMemberReducer";
 
 const WishUl = styled.ul`
   width: 100%;
@@ -86,26 +85,13 @@ const DeleteImg = styled.img`
 `;
 
 const WishLists = ({ list, index, moveList, editFunc, avail }) => {
+  const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
-  const updatedListsWithNewPriority = useSelector(state => state.wishlist.list)
-  console.log(updatedListsWithNewPriority)
+  const wishlist = useSelector(state => state.wishlist.list)
   const ref = useRef(null);
   const handleDelete = () => {
-    axios
-    .delete(
-      `${apiUrl.url}/wishlists/${list.wishlistId}/${memberId}`,
-      {
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-          'key' : 'ngrok-skip-browser-warning',
-          'value' : true
-        },
-      }
-    )
-    .then((res) => window.location.reload())
-    .catch((err) => console.log(err));
+    dispatch(setDataList(wishlist.filter(el => el.wishlistName !== list.wishlistName)))
   };
-  const dispatch = useDispatch();
   const handleEdit = () => {
     editFunc(list);
     dispatch(setId(list.wishlistId))
@@ -136,7 +122,6 @@ const WishLists = ({ list, index, moveList, editFunc, avail }) => {
   });
 
   drag(drop(ref));
-  
   const categoryImg = {
     식비_간식: "https://www.svgrepo.com/show/427322/dinner-food.svg",
     주거_통신: "https://www.svgrepo.com/show/287689/house.svg",
@@ -188,21 +173,19 @@ export default function WishListDragContainer({
 }) {
   const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
-  console.log(wishlist)
+  const loginMember = useSelector(state => state.loginMember.loginMember)
+  const targetExpend = loginMember.goal
   const moveList = (dragIndex, hoverIndex) => {
     const draggedList = wishlist[dragIndex];
     const updatedLists = wishlist.slice();
     updatedLists.splice(dragIndex, 1);
     updatedLists.splice(hoverIndex, 0, draggedList);
-
     const updatedListsWithNewPriority = updatedLists.map((list, index) => ({
       ...list,
       priority: index
     }));
     dispatch(setDataList(updatedListsWithNewPriority));
   };
-
-  const targetExpend = useSelector(state => state.loginMember.loginMember.goal)
 
   let sum = 0
   const availableWishlist = wishlist.map(list => {
@@ -221,7 +204,12 @@ export default function WishListDragContainer({
   })
   console.log(availableWishlist)
   useEffect(() => {
+    dispatch(setLoginMember({...loginMember, wishlist: availableWishlist}));
+  }, [])
+  // 
+  useEffect(() => {
     dispatch(setUseAble(targetExpend - sum))
+    
   }, [targetExpend, availableWishlist])
   return (
     <WishUl>
@@ -234,7 +222,7 @@ export default function WishListDragContainer({
               moveList={moveList}
               editFunc={editFunc}
               key={el.priority}
-            >{idx}</WishLists>
+            ></WishLists>
           );
         })}
     </WishUl>

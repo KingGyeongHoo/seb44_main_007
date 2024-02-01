@@ -4,18 +4,15 @@ import Palette from "../../Palette/Palette";
 
 
 function PieGraphList({ data }) {
-  console.log(data)
   const sum = data.reduce((sums, obj) => {
     const { amount, category } = obj;
     if (sums[category]) {
-      console.log(sums[category])
       sums[category] += amount;
     } else {
       sums[category] = amount;
     }
     return sums;
   }, {});
-  console.log(sum)
   let chartData = Object.entries(sum)
     .map(([name, value]) => ({
       name,
@@ -33,7 +30,6 @@ function PieGraphList({ data }) {
     price: obj.value,
     color: Palette[obj.name.toLowerCase().replace(/ /g, "_")],
   }));
-  console.log(ListData)
   return (
     <ListUL>
       {ListData.map((it) => {

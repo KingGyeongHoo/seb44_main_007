@@ -68,8 +68,6 @@ const LineGraph = () => {
   const maxDataValue = Math.max(...data);
   const dataMap2 = data.map((value) => 120 - value);
 
-  console.log(maxDataValue)
-
   const LineConnectorComponent = ({ data }) => {
     return (
       <LineConnector>

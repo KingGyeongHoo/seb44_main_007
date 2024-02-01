@@ -240,7 +240,6 @@ export default function LoginSignup({page}){
         const fileContent = result.Body.toString('utf-8');
         const parsedData = JSON.parse(fileContent);
         dispatch(setLoginMember(parsedData));
-        console.log(parsedData)
         localStorage.setItem('memberId', email);
         navigate('/accountbook')
       }
@@ -269,7 +268,6 @@ export default function LoginSignup({page}){
       if (err) {
         console.error('Error uploading file:', err);
       } else {
-        console.log('File uploaded successfully:', data);
         alert("회원가입에 성공하였습니다.")
         navigate('/login')
       }

@@ -3,27 +3,9 @@ import {useSelector, useDispatch} from 'react-redux'
 import { styled } from 'styled-components';
 import {setLoginMember} from "../../../Redux/loginMemberReducer";
 import AWS from 'aws-sdk'
-
-import axios from 'axios'
-import apiUrl from '../../../API_URL';
-
 const TargetAmountModal = () => {
-  
-  const memberId = localStorage.getItem('memberId')
-  const [memberData, setMemberData] = useState([])
   const dispatch = useDispatch()
   const s3 = new AWS.S3();
-  useEffect(() => {
-     axios.get(`${apiUrl.url}/totals/${memberId}`,{
-      headers: {
-        'Authorization': localStorage.getItem('Authorization-Token'),
-        'withCredentials': true,
-        'ngrok-skip-browser-warning': '69420'
-      },
-    })
-    .then(res => setMemberData(res.data))
-  }, [])
- 
   
   //모달 열기
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -70,7 +52,6 @@ const TargetAmountModal = () => {
       if (err) {
         console.error('Error uploading file:', err);
       } else {
-        console.log('File uploaded successfully:', data);
         dispatch(setLoginMember(newInfo));
         closeModal()
       }

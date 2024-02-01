@@ -215,7 +215,6 @@ const PaymentModal = ({closeModal}) => {
   const [payInfo, setPayInfo] = useState({next_redirect_pc_url: "",tid: ""})
   
   const kakaoPayment = () => {
-    console.log('카카오결제')
     const params = {
         cid: "TC0ONETIME",
         partner_order_id: "partner_order_id",

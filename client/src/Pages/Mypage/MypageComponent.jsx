@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import { styled } from 'styled-components'
 import axios from 'axios'
 import userImage from '../../Images/user.JPG'
 import { Link } from 'react-router-dom';
-
-import apiUrl from '../../API_URL';
-
+import AWS from 'aws-sdk'
+import {setLoginMember} from "../../Redux/loginMemberReducer";
 const PremiumImg = "https://www.svgrepo.com/show/485696/diamond.svg" //다이아몬드 아이콘
 
 const MypageComponent = () => {
@@ -22,22 +21,22 @@ const MypageComponent = () => {
        imgRef.current.click()
     };
 
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        // const reader = new FileReader(); // 서버x
-        // const formData = new FormData();
-        const imageURL = URL.createObjectURL(file);
-        // formData.append('image', file);
+    // const handleImageUpload = (e) => {
+    //     const file = e.target.files[0];
+    //     // const reader = new FileReader(); // 서버x
+    //     // const formData = new FormData();
+    //     const imageURL = URL.createObjectURL(file);
+    //     // formData.append('image', file);
         
-        setProfileImage(imageURL);
-        axios.patch(`${apiUrl.url}/members/${memberId}`, {
-            imageURL: imageURL,
-            }, {
-                headers: {
-                'Authorization': localStorage.getItem('Authorization-Token'),
-            }
-        })
-    };
+    //     setProfileImage(imageURL);
+    //     axios.patch(`${apiUrl.url}/members/${memberId}`, {
+    //         imageURL: imageURL,
+    //         }, {
+    //             headers: {
+    //             'Authorization': localStorage.getItem('Authorization-Token'),
+    //         }
+    //     })
+    // };
 
     // //배포 후 이미지 변경
     // const handleProfileImageChange = async () => {
@@ -89,19 +88,27 @@ const MypageComponent = () => {
           [name]: value
         }));
       };
-      console.log(member)
+    const dispatch = useDispatch()
+    const s3 = new AWS.S3()
+    const memberInfo = useSelector(state => state.loginMember.loginMember)
     const handleEditInfo = async () => {
-        try {
-          await axios.patch(`${apiUrl.url}/members/${memberId}`, updatedMember,{
-            headers: {
-                'Authorization': localStorage.getItem('Authorization-Token'),
-              },
-          });
-          setIsEdit(!isEdit);
-        } catch (error) {
-          console.error(error);
+        const newInfo = {...memberInfo, info: updatedMember}
+        const jsonInfo = JSON.stringify(newInfo, null, 2)
+        const params = {
+        Bucket: 'buyrricade',
+        Key: `members/${memberInfo.email}.json`, // 업로드할 때 사용한 파일 경로 및 이름
+        Body: jsonInfo,
+        ContentType: 'application/json',
+        };
+        s3.upload(params, (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err);
+        } else {
+            dispatch(setLoginMember(newInfo));
+            setIsEdit(!isEdit);
         }
-      };
+        });
+    };
 
     //탈퇴
     const [modalIsOpen, setModalIsOpen] = useState(false);

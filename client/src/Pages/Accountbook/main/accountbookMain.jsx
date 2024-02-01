@@ -12,15 +12,9 @@ import rightIcon from '../../../Images/right_arrow.png'
 import EditDelete from './edit,delete';
 import AWS from 'aws-sdk'
 
-import axios from 'axios'
-import apiUrl from '../../../API_URL';
-
 const AccountbookMain = () => {
-  const memberId = localStorage.getItem('memberId')
 
   //유저 정보 받아오기
-  // const [memberName, setMemberName] = useState('');
-  const s3 = new AWS.S3();
   const memberInfo = useSelector(state => state.loginMember.loginMember)
   const memberName = memberInfo.info.name
   //데이터 받아오기
@@ -42,8 +36,6 @@ const AccountbookMain = () => {
     setActiveTab(tabIndex);
   };
 
-  const sortedWishlist = useSelector(state => state.wishlist.list)
-  console.log(sortedWishlist)
   //날짜
   const selectedDate = useSelector((state) => state.selectedDate);
   
@@ -67,10 +59,6 @@ const AccountbookMain = () => {
     const formattedString = `${month} ${day}`;
     return formattedString;
 }
-
-  // console.log(new Date())
-  // console.log(currentDate)
-  // console.log(formatDate(currentDate))
 
   //총 수입, 지출 리듀서
   // const accountDataList = useSelector((state) => state.accountData.accountDataList); 
@@ -168,7 +156,7 @@ const AccountbookMain = () => {
                             ? '+ '+(item.amount.toLocaleString()) 
                             : '- '+(item.amount.toLocaleString())}
                           </S.AmountLi>
-                          <EditDelete data={item.tradeId}/>
+                          <EditDelete tradeName={item.tradeName}/>
                         </S.DataLi>
                       );
                       }):''}
