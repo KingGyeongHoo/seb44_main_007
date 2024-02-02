@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { setDataList } from "../../Redux/wishlist_reducer";
-import {setLoginMember} from "../../Redux/loginMemberReducer";
+import { setLoginMember } from "../../Redux/loginMemberReducer";
 import { data } from "../../InitData/wishlist";
 import Modal from "./Modal";
 import WishListDragContainer from "./Wishlists";
@@ -137,10 +137,10 @@ export default function Wishlist() {
   useEffect(() => {
     dispatch(setDataList(wishlist))
   }, [])
-  
+
   const s3 = new AWS.S3()
   useEffect(() => {
-    const newInfo = {...loginMember, wishList: savedList}
+    const newInfo = { ...loginMember, wishList: savedList }
     const jsonInfo = JSON.stringify(newInfo, null, 2)
     const params = {
       Bucket: 'buyrricade',
@@ -148,29 +148,31 @@ export default function Wishlist() {
       Body: jsonInfo,
       ContentType: 'application/json',
     };
-    s3.upload(params, (err, data) => {
-      if (err) {
-        console.error('Error uploading file:', err);
-      } else {
-        dispatch(setLoginMember(newInfo))
-      }
-    });
+    if (savedList.length > 0) {
+      s3.upload(params, (err, data) => {
+        if (err) {
+          console.error('Error uploading file:', err);
+        } else {
+          dispatch(setLoginMember(newInfo))
+        }
+      });
+    }
   }, [savedList])
 
   const useAble = useSelector(state => state.useAble)
   const navigate = useNavigate()
-    if (!memberId) {
-        navigate("/login");
-    }
+  if (!memberId) {
+    navigate("/login");
+  }
   const targetExpend = useSelector(state => state.loginMember.loginMember.goal)
   useEffect(() => {
     let sum = 0;
-  
+
     setUsablePrice(
       targetExpend -
-        wishlist
-          .filter((el) => el.available)
-          .reduce((acc, cur) => acc + cur.price, 0)
+      wishlist
+        .filter((el) => el.available)
+        .reduce((acc, cur) => acc + cur.price, 0)
     );
   }, [targetExpend, wishlist]);
 
@@ -290,7 +292,7 @@ export default function Wishlist() {
                   wishlist={sortedWishlist}
                   editFunc={editWishlist}
                   deleteFunc={deleteWishlist}
-                  // setWishlist={setWishlist}
+                // setWishlist={setWishlist}
                 ></WishListDragContainer>
               </DndProvider>
             </ListDiv>
