@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import {useSelector} from 'react-redux'
 
 const GraphWrap = styled.div`
   padding: 1%;
@@ -62,8 +63,17 @@ const LineConnector = styled.svg`
 `;
 
 const LineGraph = () => {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = useSelector(state => state.selectedDate.selectedDate).slice(5,7)/1
+  let day = [];
+  for(let i = month; i < month + 12; i++){
+    const yearSet = i >= month ? year-1 : year
+    const monthSet = i < 10 ? "0"+i%12 : (i === 12 ? "12" : i%12)
+    day.push(`${yearSet}-${monthSet}`)
+  }
+  const tradeData = useSelector(state => state.loginMember.loginMember)
   const data = [55, 47, 75, 40, 75, 70, 40, 60, 55, 85, 52, 63];
-  const day = ['22.08','22.09','22.10','22.11','22.12','23.01','23.02','23.03','23.04','23.05','23.06','23.07',];
   const dataMap = data.map((value) => value * 10020);
   const maxDataValue = Math.max(...data);
   const dataMap2 = data.map((value) => 120 - value);

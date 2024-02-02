@@ -35,11 +35,18 @@ export const Calender = () => {
         setCurrentMonth(addMonths(currentMonth, 1));
     };
 
+    const formatDate = (date) => {
+        const formattedDate = new Date(date);
+        const year = formattedDate.getFullYear();
+        const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+        const day = String(formattedDate.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
     const dispatch = useDispatch();
     //날짜 
     const onDateClick = (day) => {
-        setSelectedDate(day);
-        dispatch(selectDate(day))
+        setSelectedDate(formatDate(day));
+        dispatch(selectDate(formatDate(day)))
     };
 
     const monthStart = startOfMonth(currentMonth);
