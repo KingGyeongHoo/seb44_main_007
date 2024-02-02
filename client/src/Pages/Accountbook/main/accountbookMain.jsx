@@ -14,36 +14,12 @@ import AWS from 'aws-sdk'
 
 const AccountbookMain = () => {
 
-  //유저 정보 받아오기
-  const memberInfo = useSelector(state => state.loginMember.loginMember)
-  const memberName = memberInfo.info.name
-  //데이터 받아오기
-  const accountData = memberInfo.trade
-
-  const dispatch = useDispatch();
-  // const targetExpend = useSelector((state) => state.targetExpend);
-  const totalProfitSelector = useSelector((state) => state.totalProfit);
-  const totalExpendSelector = useSelector((state) => state.totalExpend);
-  
-  const [activeTab, setActiveTab] = useState(0);
-
   const today = new Date();
   const year = today.getFullYear();
   const month = (today.getMonth() + 1) > 9 ? (today.getMonth() + 1) : '0' + (today.getMonth() + 1);
   const day = today.getDate() > 9 ? today.getDate() : '0' + today.getDate();
 
-  const handleTabClick = (tabIndex) => {
-    setActiveTab(tabIndex);
-  };
-
-  //날짜
   const selectedDate = useSelector((state) => state.selectedDate);
-  
-  const handleDateChange = (date) => {
-    dispatch(selectDate(date));
-  };
-
-  const currentDate = selectedDate.selectedDate;
 
   const formatDate = (date) => {
     const formattedDate = new Date(date);
@@ -52,6 +28,36 @@ const AccountbookMain = () => {
     const day = String(formattedDate.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+  
+  const handleDateChange = (date) => {
+    dispatch(selectDate(formatDate(date)));
+  };
+  //유저 정보 받아오기
+  const memberInfo = useSelector(state => state.loginMember.loginMember)
+  const memberData = memberInfo.trade
+  const memberName = memberInfo.info.name
+  //데이터 받아오기
+  const currentDate = selectedDate.selectedDate;
+  const [accountData, setAccountData] = useState(memberData.filter(el => el.date.slice(0, 7) === currentDate.slice(0,7) ))
+
+  useEffect(() => {
+    setAccountData(memberData.filter(el => el.date.slice(0, 7)=== currentDate.slice(0,7)))
+  }, [selectedDate])
+  const dispatch = useDispatch();
+  // const targetExpend = useSelector((state) => state.targetExpend);
+  const totalProfitSelector = useSelector((state) => state.totalProfit);
+  const totalExpendSelector = useSelector((state) => state.totalExpend);
+  
+  const [activeTab, setActiveTab] = useState(0);
+
+
+  const handleTabClick = (tabIndex) => {
+    setActiveTab(tabIndex);
+  };
+
+  //날짜
+
+
   const formatDateShort = (date) => {
     const formattedDate = new Date(date);
     const month = formattedDate.toLocaleString('en-US', { month: 'short' });

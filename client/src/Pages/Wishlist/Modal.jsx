@@ -149,7 +149,6 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
         if (err) {
             console.error('Error uploading file:', err);
         } else {
-            console.log('File uploaded successfully:', data);
             dispatch(setLoginMember(newInfo));
             setAddCategory()
             setAddName()

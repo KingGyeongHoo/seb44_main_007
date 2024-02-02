@@ -6,15 +6,335 @@
         "phone": "01012345678",
         "imageURL": "https://www.svgrepo.com/show/362137/profile.svg",
         "premium": null,
-        "address": ""
+        "address": "사우디아라비아 어딘가"
     },
     "trade": [
+        {
+            "type": "수입",
+            "tradeName": "월급",
+            "amount": 1800000,
+            "note": "12월 월급",
+            "date": "2024-01-01",
+            "category": "월급_용돈"
+        },
+        {
+            "type": "지출",
+            "tradeName": "아쿠아플라넷",
+            "amount": 33800,
+            "note": "",
+            "date": "2024-01-01",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "쿼카스티커",
+            "amount": 4400,
+            "note": "",
+            "date": "2024-01-02",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "팝콘/콜라",
+            "amount": 11000,
+            "note": "",
+            "date": "2024-01-02",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "용산 저녁",
+            "amount": 58900,
+            "note": "",
+            "date": "2024-01-02",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "을지로 쎄시봉",
+            "amount": 48000,
+            "note": "",
+            "date": "2024-01-02",
+            "category": "교육_문화"
+        },
+        {
+            "type": "지출",
+            "tradeName": "버거킹",
+            "amount": 17200,
+            "note": "",
+            "date": "2024-01-02",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "크리스마스",
+            "amount": 200000,
+            "note": "밥, 선물값",
+            "date": "2024-01-04",
+            "category": "교육_문화"
+        },
+        {
+            "type": "지출",
+            "tradeName": "타코익스프레스",
+            "amount": 10000,
+            "note": "",
+            "date": "2024-01-09",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "동생 송금",
+            "amount": 10000,
+            "note": "용돈 1만원",
+            "date": "2024-01-09",
+            "category": "생활_마트"
+        },
+        {
+            "type": "지출",
+            "tradeName": "커피",
+            "amount": 2000,
+            "note": "",
+            "date": "2024-01-13",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "이체",
+            "amount": 30000,
+            "note": "타행 이체",
+            "date": "2024-01-13",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "수잔나",
+            "amount": 22700,
+            "note": "",
+            "date": "2024-01-13",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "편의점",
+            "amount": 2900,
+            "note": "샌드위치 구입",
+            "date": "2024-01-13",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "모노맨션",
+            "amount": 4000,
+            "note": "",
+            "date": "2024-01-13",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "카카오페이 이체",
+            "amount": 148400,
+            "note": "타행 이체",
+            "date": "2024-01-16",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "회정식 미소야",
+            "amount": 144000,
+            "note": "",
+            "date": "2024-01-16",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "횟값 수금",
+            "amount": 45000,
+            "note": "",
+            "date": "2024-01-17",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "돈룩업",
+            "amount": 6000,
+            "note": "",
+            "date": "2024-01-17",
+            "category": "생활_마트"
+        },
+        {
+            "type": "지출",
+            "tradeName": "파리바게트",
+            "amount": 10000,
+            "note": "",
+            "date": "2024-01-17",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "친구 빌려줌",
+            "amount": 50000,
+            "note": "용재 50000원",
+            "date": "2024-01-18",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "육회비빔밥",
+            "amount": 22180,
+            "note": "",
+            "date": "2024-01-18",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "카카오페이 이체",
+            "amount": 3020,
+            "note": "",
+            "date": "2024-01-18",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "이체",
+            "amount": 4400,
+            "note": "타행 이체",
+            "date": "2024-01-19",
+            "category": "생활_마트"
+        },
+        {
+            "type": "지출",
+            "tradeName": "다이소",
+            "amount": 4000,
+            "note": "",
+            "date": "2024-01-19",
+            "category": "생활_마트"
+        },
+        {
+            "type": "수입",
+            "tradeName": "이체",
+            "amount": 4000,
+            "note": "타행 이체",
+            "date": "2024-01-20",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "편의점",
+            "amount": 7600,
+            "note": "",
+            "date": "2024-01-20",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "음료수",
+            "amount": 3000,
+            "note": "",
+            "date": "2024-01-23",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "편의점 ",
+            "amount": 8500,
+            "note": "",
+            "date": "2024-01-24",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "메가커피",
+            "amount": 7400,
+            "note": "",
+            "date": "2024-01-24",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "가자마트",
+            "amount": 7000,
+            "note": "양파, 딸기 구입",
+            "date": "2024-01-24",
+            "category": "생활_마트"
+        },
+        {
+            "type": "지출",
+            "tradeName": "샴페인",
+            "amount": 9500,
+            "note": "",
+            "date": "2024-01-24",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "포토이즘",
+            "amount": 4000,
+            "note": "",
+            "date": "2024-01-24",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "돈냉",
+            "amount": 13500,
+            "note": "",
+            "date": "2024-01-25",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "이자",
+            "amount": 2500,
+            "note": "",
+            "date": "2024-01-25",
+            "category": "투자_이자"
+        },
+        {
+            "type": "수입",
+            "tradeName": "친구에게 빌림",
+            "amount": 20000,
+            "note": "용범이 20000원",
+            "date": "2024-01-27",
+            "category": "기타수입"
+        },
+        {
+            "type": "지출",
+            "tradeName": "종총뒷풀이",
+            "amount": 15430,
+            "note": "",
+            "date": "2024-01-27",
+            "category": "식비_간식"
+        },
+        {
+            "type": "지출",
+            "tradeName": "와플",
+            "amount": 1500,
+            "note": "",
+            "date": "2024-01-27",
+            "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "이체",
+            "amount": 15983,
+            "note": "",
+            "date": "2024-01-28",
+            "category": "생활_마트"
+        },
+        {
+            "type": "지출",
+            "tradeName": "감자탕",
+            "amount": 20000,
+            "note": "",
+            "date": "2024-01-28",
+            "category": "식비_간식"
+        },
         {
             "type": "지출",
             "tradeName": "책 구매",
             "amount": 15000,
             "note": "새학기 책 구매",
-            "date": "2024-01-31",
+            "date": "2024-01-30",
             "category": "교육_문화"
         },
         {
@@ -24,30 +344,49 @@
             "note": "점심 만두 구입",
             "date": "2024-01-31",
             "category": "식비_간식"
+        },
+        {
+            "type": "수입",
+            "tradeName": "용돈",
+            "amount": 100000,
+            "note": "아버지가 주신 용돈",
+            "date": "2024-01-31",
+            "category": "월급_용돈"
+        },
+        {
+            "type": "수입",
+            "tradeName": "용돈",
+            "amount": 50000,
+            "note": "어머니가 주신 용돈",
+            "date": "2024-02-02",
+            "category": "월급_용돈"
         }
     ],
-    "goal": 300000,
+    "goal": 500000,
     "wishList": [
         {
-            "createdAt": "2024-01-31T22:20:02.291572",
-            "modifiedAt": "2024-01-31T22:20:02.291572",
-            "wishlistName": "플스2",
-            "price": 390000,
-            "category": "기타"
+            "createdAt": "2024-02-02",
+            "modifiedAt": "2024-02-02",
+            "wishlistName": "모자",
+            "price": 5000,
+            "category": "의류_미용",
+            "priority": 0
         },
         {
-            "createdAt": "2024-01-31T22:25:02.291572",
-            "modifiedAt": "2024-01-31T22:25:02.291572",
-            "wishlistName": "텀블러",
-            "price": 25000,
-            "category": "생활_마트"
+            "createdAt": "2024-02-02",
+            "modifiedAt": "2024-02-02",
+            "wishlistName": "치킨",
+            "price": 20000,
+            "category": "식비_간식",
+            "priority": 1
         },
         {
-            "createdAt": "2024-01-31T23:20:02.291572",
-            "modifiedAt": "2024-01-31T23:20:02.291572",
-            "wishlistName": "갤럭시S24",
-            "price": 1350000,
-            "category": "주거_통신"
+            "createdAt": "2024-02-02",
+            "modifiedAt": "2024-02-02",
+            "wishlistName": "차량용 방향제",
+            "price": 8000,
+            "category": "교통_차량",
+            "priority": 2
         }
     ]
 }

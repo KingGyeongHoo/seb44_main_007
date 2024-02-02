@@ -8,142 +8,13 @@ import leftArrow from '../../Images/left_arrow.png'
 
 import axios from 'axios'
 import apiUrl from '../../API_URL';
+import AWS from 'aws-sdk'
 
 // component import
 import PieGraph from "./PieGraph";
 import PieGraphList from "./PieGraphList";
 import CategoryCompare from "./CategoryCompare";
 import LineGraph from "./LineGraph";
-
-const lastDummy = [
-  {
-    tradeId: 1,
-    type: "지출",
-    tradeName: "커피",
-    amount: 4900,
-    note: "메가커피에서 커피 수혈",
-    date: "2023-06-01",
-    category: "식비_간식",
-  },
-  {
-    tradeId: 2,
-    type: "지출",
-    tradeName: "아이스크림",
-    amount: 1200,
-    note: "너무 더워서 아이스크림 하나 쪽쪽",
-    date: "2023-06-01",
-    category: "식비_간식",
-  },
-  {
-    tradeId: 3,
-    type: "지출",
-    tradeName: "맥주",
-    amount: 32000,
-    note: "톰 크루즈와 부평에서 시원한 맥주 한잔",
-    date: "2023-06-01",
-    category: "식비_간식",
-  },
-  {
-    incomeId: 1,
-    type: "수입",
-    tradeName: "n빵",
-    amount: 14500,
-    note: "톰형 반띵하기로 해놓고 환율+해외송금 수수료 핑계대면서 14500원만 보냄",
-    date: "2023-06-02",
-    category: "기타수입",
-  },
-  {
-    tradeId: 4,
-    type: "지출",
-    tradeName: "냉면",
-    amount: 9000,
-    note: "해장에는 역시 냉면",
-    date: "2023-06-02",
-    category: "식비_간식",
-  },
-  {
-    tradeId: 5,
-    type: "지출",
-    tradeName: "누진세",
-    amount: 16000,
-    note: "뉴진스 콘서트 예매한다는게 누진세를 내버림",
-    date: "2023-06-02",
-    category: "보험_세금",
-  },
-  {
-    tradeId: 6,
-    type: "지출",
-    tradeName: "셔츠",
-    amount: 45000,
-    note: "매우 맘에 듬",
-    date: "2023-06-02",
-    category: "의류_미용",
-  },
-  {
-    tradeId: 7,
-    type: "지출",
-    tradeName: "이마트",
-    amount: 4900,
-    note: "커피 구매",
-    date: "2023-06-03",
-    category: "생활_마트",
-  },
-  {
-    fixedId: 1,
-    type: "지출",
-    tradeName: "월세",
-    amount: 400000,
-    note: "월세 지출,,,,",
-    date: "2023-06-03",
-    category: "주거_통신",
-  },
-  {
-    tradeId: 8,
-    type: "지출",
-    tradeName: "야구 경기 관람",
-    amount: 12000,
-    note: "길바닥에 돈을 버리고 왔다.",
-    date: "2023-06-04",
-    category: "교육_문화",
-  },
-  {
-    tradeId: 9,
-    type: "지출",
-    tradeName: "유니폼 구매",
-    amount: 55000,
-    note: "방바닥 닦을 걸레가 하나 더 생겼나",
-    date: "2023-06-04",
-    category: "식비_간식",
-  },
-  {
-    tradeId: 10,
-    type: "지출",
-    tradeName: "맥주",
-    amount: 50000,
-    note: "찬호형과 경기를 곱씹으며 맥주 한잔",
-    date: "2023-06-04",
-    category: "식비_간식",
-  },
-  {
-    incomeId: 2,
-    type: "지출",
-    tradeName: "교통비",
-    amount: 50000,
-    note: "지하철",
-    date: "2023-06-05",
-    category: "교통_차량",
-  },
-  {
-    incomeId: 3,
-    type: "지출",
-    tradeName: "찬호형 n빵",
-    amount: 30000,
-    note: "송금 메모가 '제가LA에있을' 에서 끊겨 있다.",
-    date: "2023-06-05",
-    category: "의료_건강",
-  },
-];
-// Dummy Data Import
 
 function Analysis() {
 
@@ -154,42 +25,23 @@ function Analysis() {
     }
 
   //데이터 받아오기
-  const [accountData, setAccountData] = useState([]);
-  const [lastmonthData, setLastMonthData] = useState(lastDummy); // 전체 데이터(지난달)
-
-  useEffect(() => {
-      const getData = async () => {
-      try {
-          const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-0${month}-01&endDate=2023-0${month}-31`,{
-              headers: {
-                'ngrok-skip-browser-warning': '69420',
-                'withCredentials': true,
-                'Authorization': localStorage.getItem('Authorization-Token'),
-              },
-            });
-            setAccountData(response.data);
-            // 지난달 데이터 받아오기
-            // axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-0${month-1}-01&endDate=2023-0${month-1}-31`,{
-            //   headers: {
-            //     'ngrok-skip-browser-warning': '69420',
-            //     'withCredentials': true,
-            //     'Authorization': localStorage.getItem('Authorization-Token'),
-            //   },
-            // })
-            // .then(res => setLastMonthData(res.data))
-      } catch (error) {
-          console.error(error);
-      }
-    };
-    getData();
-  }, [memberId]);
-
+  // const [accountData, setAccountData] = useState([]);
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
 
+  const memberData = useSelector(state => state.loginMember.loginMember.trade)
+  const [accountData, setAccountData] = useState(memberData.filter(el => el.date.slice(5, 7)/1 === month && el.date.slice(0, 4)/1 === year))
+  const [lastmonthData, setLastmonthData] = useState(memberData.filter(el => el.date.slice(5, 7)/1 === month - 1 && (month === 1 ? el.date.slice(0, 4)/1 === year - 1 : el.date.slice(0, 4)/1 === year))) // 전체 데이터(지난달)
+
+  useEffect(() => {
+    setAccountData(memberData.filter(el => el.date.slice(5, 7)/1 === month && el.date.slice(0, 4)/1 === year))
+    setLastmonthData(memberData.filter(el => el.date.slice(5, 7)/1 === month - 1 && (month === 1 ? el.date.slice(0, 4)/1 === year - 1 : el.date.slice(0, 4)/1 === year)))
+  }, [month])
+
   // get Data from Redux
-  const initData = useSelector((state) => state.data.initData);
+  // const initData = useSelector((state) => state.data.initData);
+  const initData = useSelector(state => state.loginMember.loginMember.trade)
 
   // dataState
   const [monthData, setMonthData] = useState([]); // 전체 데이터(이번달)
@@ -212,21 +64,9 @@ function Analysis() {
   }, [initData, month, year]);
 
   // 수입,지출 총 금액 산정
-  const totalProfitSelector = useSelector((state) => state.totalProfit); //총 수입
-  const totalExpendSelector = useSelector((state) => state.totalExpend); //총 지출
+  const totalProfitSelector = accountData.filter(el => el.type === "수입").reduce((acc, cur) => acc + cur.amount, 0);
+  const totalExpendSelector = accountData.filter(el => el.type === "지출").reduce((acc, cur) => acc + cur.amount, 0);
   const accountDataList = accountData;
-  
-  // //서버
-  // useEffect(() => {
-  //   const ExpendData = Array.isArray(accountDataList) // 지출 데이터
-  //     ? accountDataList.filter((item) => item.type === '지출')
-  //     : 0;
-  //   setSpendData(ExpendData);
-  //   const ProfitData = Array.isArray(accountDataList) //수입 데이터
-  //     ? accountDataList.filter((item) => item.type === '수입')
-  //     : 0;
-  //   setIncomeData(ProfitData);
-  // }, [accountDataList]);
 
   useEffect(() => {
     const filterData1 = monthData.reduce((acc, cur, idx) => {
@@ -253,32 +93,29 @@ function Analysis() {
     setIncomeData(filterData4);
   }, [monthData]);
 
-
   // function
-  const onClickHandler = (e) => {
-    const result = e.target.value;
-    if (result === "prev") {
+  const goToPrev = () => {
       if (month === 1) {
         setYear(year - 1); // 연도 하나 줄어듬
         setMonth(12);
       } else {
         setMonth(month - 1);
       }
+  };
+  const goToNext = (type) => {
+    if (month === 12) {
+      setYear(year + 1); // 연도 하나 늘어남
+      setMonth(1);
     } else {
-      if (month === 12) {
-        setYear(year + 1); // 연도 하나 늘어남
-        setMonth(1);
-      } else {
-        setMonth(month + 1);
-      }
+      setMonth(month + 1);
     }
   };
   return (
     <AnalysisPage>    
       <PageTop>
-        <PageMoveImg src={leftArrow} onClick={onClickHandler} value="prev" />
+        <PageMoveImg src={leftArrow} onClick={goToPrev} value="prev" />
         <p>{year}년 {month}월</p>
-        <PageMoveImg src={rightArrow} onClick={onClickHandler} value="next" />
+        <PageMoveImg src={rightArrow} onClick={goToNext} value="next" />
       </PageTop>
       <PageWrap>
         <PageMiddle>

@@ -85,7 +85,6 @@ const DeleteImg = styled.img`
 `;
 
 const WishLists = ({ list, index, moveList, editFunc, avail }) => {
-  console.log(list)
   const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
   const wishlist = useSelector(state => state.wishlist.list)
@@ -205,7 +204,6 @@ const WishListDragContainer = ({
   //     }
   //   }
   // })
-  console.log(typeof(list))
   const newList = list.map(list => {
     if (list.price + sum < targetExpend) {
       sum += list.price
@@ -224,7 +222,6 @@ const WishListDragContainer = ({
     setAvailableWishlist(newList)
   dispatch(setLoginMember({ ...loginMember, wishList: availableWishlist }));
 }, [list])
-console.log(availableWishlist)
 
   useEffect(() => {
     dispatch(setUseAble(targetExpend - sum))
