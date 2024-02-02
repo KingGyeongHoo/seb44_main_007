@@ -204,7 +204,7 @@ export default function WishListDragContainer({
   })
   console.log(availableWishlist)
   useEffect(() => {
-    dispatch(setLoginMember({...loginMember, wishlist: availableWishlist}));
+    dispatch(setLoginMember({...loginMember, wishList: availableWishlist}));
   }, [])
   // 
   useEffect(() => {
