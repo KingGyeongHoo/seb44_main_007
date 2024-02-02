@@ -5,6 +5,7 @@ import { LimitInput } from './Wishlist'
 import Palette from "../../Palette/Palette";
 import { useSelector, useDispatch } from 'react-redux';
 import {setLoginMember} from "../../Redux/loginMemberReducer";
+import {setDataList} from "../../Redux/wishlist_reducer"
 import AWS from 'aws-sdk'
 export const ModalBackground = styled.div`
   position: absolute;
@@ -92,7 +93,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
   const dispatch = useDispatch()
   const info = useSelector(state => state.loginMember.loginMember)
   const category = ['식비_간식','주거_통신','교통_차량','생활_마트','의류_미용','의료_건강','교육_문화','보험_세금']
-  const [addCategory, setAddCategory] = useState()
+  const [addCategory, setAddCategory] = useState('식비_간식')
   const [addName, setAddName] = useState()
   const [addPrice, setAddPrice] = useState()
 
@@ -110,8 +111,9 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
       "wishlistName": addName,
       "price": Number(addPrice),
       "category": addCategory,
-      "priority": wishlist.list.length + 1
+      "priority": wishlist.list.length
       }
+      dispatch(setDataList([...info.wishList, newWishlist]))
       const newInfo = {...info, wishList:[...info.wishList, newWishlist]}
       const jsonInfo = JSON.stringify(newInfo, null, 2)
       const params = {
@@ -126,7 +128,6 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
         } else {
             dispatch(setLoginMember(newInfo));
             close()
-            window.location.reload()
         }
         });
   }

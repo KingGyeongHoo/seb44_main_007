@@ -1,11 +1,11 @@
 import { styled } from "styled-components";
 import Palette from "../../Palette/Palette";
 import { useDrop, useDrag } from "react-dnd";
-import { useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { setId } from "../../Redux/id_reducer";
 import { setDataList, setUseAble } from "../../Redux/wishlist_reducer";
-import {setLoginMember} from "../../Redux/loginMemberReducer";
+import { setLoginMember } from "../../Redux/loginMemberReducer";
 
 const WishUl = styled.ul`
   width: 100%;
@@ -85,6 +85,7 @@ const DeleteImg = styled.img`
 `;
 
 const WishLists = ({ list, index, moveList, editFunc, avail }) => {
+  console.log(list)
   const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
   const wishlist = useSelector(state => state.wishlist.list)
@@ -167,13 +168,14 @@ const WishLists = ({ list, index, moveList, editFunc, avail }) => {
   );
 };
 
-export default function WishListDragContainer({
+const WishListDragContainer = ({
   wishlist,
   editFunc,
-}) {
+}) => {
   const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
   const loginMember = useSelector(state => state.loginMember.loginMember)
+  const list = useSelector(state => state.wishlist.list)
   const targetExpend = loginMember.goal
   const moveList = (dragIndex, hoverIndex) => {
     const draggedList = wishlist[dragIndex];
@@ -188,8 +190,24 @@ export default function WishListDragContainer({
   };
 
   let sum = 0
-  const availableWishlist = wishlist.map(list => {
-    if(list.price + sum < targetExpend){
+  const [availableWishlist, setAvailableWishlist] = useState(loginMember.wishList)
+  // const availableWishlist = wishlist.map(list => {
+  //   if (list.price + sum < targetExpend) {
+  //     sum += list.price
+  //     return {
+  //       ...list,
+  //       available: true
+  //     }
+  //   } else {
+  //     return {
+  //       ...list,
+  //       available: false
+  //     }
+  //   }
+  // })
+  console.log(typeof(list))
+  const newList = list.map(list => {
+    if (list.price + sum < targetExpend) {
       sum += list.price
       return {
         ...list,
@@ -202,14 +220,15 @@ export default function WishListDragContainer({
       }
     }
   })
-  console.log(availableWishlist)
   useEffect(() => {
-    dispatch(setLoginMember({...loginMember, wishList: availableWishlist}));
-  }, [])
-  // 
+    setAvailableWishlist(newList)
+  dispatch(setLoginMember({ ...loginMember, wishList: availableWishlist }));
+}, [list])
+console.log(availableWishlist)
+
   useEffect(() => {
     dispatch(setUseAble(targetExpend - sum))
-    
+
   }, [targetExpend, availableWishlist])
   return (
     <WishUl>
@@ -228,3 +247,4 @@ export default function WishListDragContainer({
     </WishUl>
   );
 }
+export default WishListDragContainer;
