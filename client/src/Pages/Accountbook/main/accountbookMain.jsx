@@ -42,7 +42,7 @@ const AccountbookMain = () => {
 
   useEffect(() => {
     setAccountData(memberData.filter(el => el.date.slice(0, 7)=== currentDate.slice(0,7)))
-  }, [selectedDate])
+  }, [selectedDate, memberInfo])
   const dispatch = useDispatch();
   // const targetExpend = useSelector((state) => state.targetExpend);
   const totalProfitSelector = useSelector((state) => state.totalProfit);

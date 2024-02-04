@@ -224,13 +224,13 @@ const PaymentModal = ({closeModal}) => {
         total_amount: 2000,
         vat_amount: 0,
         tax_free_amount: 0,
-        approval_url: "http://buyrricade-client.s3-website.ap-northeast-2.amazonaws.com/paying",
-        fail_url: "http://buyrricade-client.s3-website.ap-northeast-2.amazonaws.com/paying",
-        cancel_url: "http://buyrricade-client.s3-website.ap-northeast-2.amazonaws.com/paying",
+        approval_url: "http://localhost:3000/paying",
+        fail_url: "http://localhost:3000/paying",
+        cancel_url: "http://localhost:3000/paying",
       }
     axios.post('https://kapi.kakao.com/v1/payment/ready', params, {
       headers: {
-        Authorization: "KakaoAK 24a6516395e63c6bafa73862364422ac",
+        Authorization: process.env.REACT_APP_KakaoAK,
         "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
       },
     })

@@ -183,7 +183,7 @@ function Analysis() {
         </PageMiddle>
         <PageBottom>
           <InnerTitle style={{marginBottom: '20px',border : 'none'}}>월별 지출 비교</InnerTitle>
-          <LineGraph />
+          <LineGraph selectedMonth={`${year}-${month}`} />
         </PageBottom>
       </PageWrap>
     </AnalysisPage>
@@ -207,7 +207,7 @@ const PageWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 40px;
-  height: 100vh;
+  height: 100%;
   color: white;
 `;
 

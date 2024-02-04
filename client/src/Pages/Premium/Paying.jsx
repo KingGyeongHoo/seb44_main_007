@@ -23,28 +23,9 @@ export default function Paying() {
     };
     axios.post('https://kapi.kakao.com/v1/payment/approve', params, {
       headers: {
-        Authorization: "KakaoAK 24a6516395e63c6bafa73862364422ac",
+        Authorization: process.env.REACT_APP_KakaoAK,
         "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
       },
-    })
-    .then(res => {
-      return axios.get(`${apiUrl.url}/members/${memberId}`, {
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-          'ngrok-skip-browser-warning': '69420',
-          'withCredentials': true,
-        },
-      });
-    })
-    .then(res => {
-      // Now, you can proceed with the patch request
-      return axios.patch(`${apiUrl.url}/members/${memberId}`, { premium: true }, {
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-          'ngrok-skip-browser-warning': '69420',
-          'withCredentials': true,
-        },
-      });
     })
     .then(res => {
       dispatch(setPayment(true))

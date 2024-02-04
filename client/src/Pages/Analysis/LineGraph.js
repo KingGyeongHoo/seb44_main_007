@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, PureComponent } from "react";
+import {
+  ComposedChart,
+  Line,
+  Bar,
+  XAxis,
+  Label,
+  LabelList,
+  ResponsiveContainer
+} from 'recharts';
 import styled from "styled-components";
 import {useSelector} from 'react-redux'
 
@@ -62,72 +71,70 @@ const LineConnector = styled.svg`
   z-index: 2;
 `;
 
-const LineGraph = () => {
+const LineGraph = ({selectedMonth}) => {
   const date = new Date()
   const year = date.getFullYear()
-  const month = useSelector(state => state.selectedDate.selectedDate).slice(5,7)/1
-  let day = [];
-  for(let i = month; i < month + 12; i++){
-    const yearSet = i >= month ? year-1 : year
-    const monthSet = i < 10 ? "0"+i%12 : (i === 12 ? "12" : i%12)
-    day.push(`${yearSet}-${monthSet}`)
-  }
-  const tradeData = useSelector(state => state.loginMember.loginMember)
-  const data = [55, 47, 75, 40, 75, 70, 40, 60, 55, 85, 52, 63];
-  const dataMap = data.map((value) => value * 10020);
+  const month = selectedMonth.slice(5, 7)/1
+  const monthArray = Array
+  .from({ length: 12 }, (_, index) => (selectedMonth.slice(5, 7)/1 + index) % 12 || 12)
+  .map(curMonth => {
+    if(curMonth >= month){
+      if(curMonth < 10){
+        return `${year-1}-0${curMonth}`
+      } else {
+        return `${year-1}-${curMonth}`
+      }
+    } else {
+      if(curMonth < 10){
+        return `${year}-0${curMonth}`
+      } else {
+        return `${year}-${curMonth}`
+      }
+    }
+  });
+
+  const tradeData = useSelector(state => state.loginMember.loginMember.trade)
+  const data = monthArray.map(el => {
+    return(
+      {
+        date: el,
+        amount: tradeData
+        .filter(item => item.date.slice(0, 7) === el && item.type === "지출")
+        .reduce((acc, cur) => acc + cur.amount, 0)
+      }
+    )
+  })
   const maxDataValue = Math.max(...data);
-  const dataMap2 = data.map((value) => 120 - value);
 
-  const LineConnectorComponent = ({ data }) => {
+  const CustomizedLabel = (props) => {
+    const { x, y, value } = props;
+  
     return (
-      <LineConnector>
-        {data.map((value, index) => {
-          const nextValue = data[index + 1];
-          if (nextValue !== undefined) {
-            const x1 = ((index + 0.5) * 100) / data.length + "%";
-            const y1 = (maxDataValue - value) + "px"; // Adjust the y position
-            const x2 = ((index + 1) * 100) / data.length + 4 + "%";
-            const y2 = (maxDataValue - nextValue) + "px"; // Adjust the y position
-            return <Line key={index} x1={x1} y1={y1} x2={x2} y2={y2} />;
-          }
-          return null;
-        })}
-      </LineConnector>
+      <text x={x} y={y} dx={10} dy={-5}  fill="#8884d8" fontSize={16} textAnchor="middle">
+        {value.toLocaleString()}
+      </text>
     );
   };
 
-
-  const Line = ({ x1, y1, x2, y2 }) => (
-    <line
-      x1={x1}
-      y1={y1}
-      x2={x2}
-      y2={y2}
-      stroke="#C5FF78"
-      strokeWidth="0.7"
-      strokeLinecap="round" // Optional: Add rounded line ends
-    />
-  );
-
-  const GraphContainer = ({ value, index }) => {
-    return (
-      <DataWrap>
-        <GraphTop value={value}/>
-        <GraphBottom>
-          <p>{day[index]}</p>
-          <p>{dataMap[index].toLocaleString()}원</p>
-        </GraphBottom>
-      </DataWrap>
-    );
-  };
+  const formatXAxis  = (tickItem => tickItem.toLocaleString())
 
   return (
-    <GraphWrap>
-      <LineConnectorComponent data={data} />
-      {dataMap2.map((value, index) => (
-        <GraphContainer key={index} value={value} index={index} />
-      ))}
-    </GraphWrap>
+      <ResponsiveContainer width="100%" height="100%">
+        <ComposedChart
+          data={data}
+        >
+          <XAxis dataKey="date" />
+          <Bar dataKey="amount" barSize={20} fill="#413ea0">
+            <LabelList
+              dataKey="amount"
+              position="top"
+              fill="#ffffff"
+              content={<CustomizedLabel />}
+            />
+          </Bar>
+          <Line type="monotone" dataKey="amount" stroke="#ff7300" />
+        </ComposedChart>
+      </ResponsiveContainer>
   );
 };
 
