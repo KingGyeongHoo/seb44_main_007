@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../Wishlist/Wishlist";
 import { ModalBackground, ModalContainer, ModalDiv } from "../Wishlist/Modal"
 import { useNavigate } from 'react-router-dom';
-import { setPayInfo } from '../../Redux/payInfo_reducer'
+import {setLoginMember} from "../../Redux/loginMemberReducer";
 import axios from "axios"
 
 const PremiumContainer = styled.div`
@@ -214,9 +214,15 @@ const PaySpan = styled.span`
 const PaymentModal = ({closeModal}) => {
   const [onPayment, setOnPayment] = useState(false)
   const dispatch = useDispatch()
-  const [info, setInfo] = useState({next_redirect_pc_url: "",tid: ""})
-  
+
+  const memberInfo = useSelector((state) => state.loginMember.loginMember);
+
   const kakaoPayment = () => {
+    const newInfo = {
+      ...memberInfo,
+      info: { ...memberInfo.info, premium: true },
+    };
+
     const params = {
         cid: "TC0ONETIME",
         partner_order_id: "partner_order_id",
@@ -232,14 +238,14 @@ const PaymentModal = ({closeModal}) => {
       }
     axios.post('https://kapi.kakao.com/v1/payment/ready', params, {
       headers: {
-        Authorization: "KakaoAK 6ebdcc5b32202a296e8859a0f0e99f5f",
+        Authorization: `KakaoAK ${process.env.REACT_APP_KakaoAK}`,
         "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
       },
     })
     .then(res => {
-      console.log(res.data.tid)
       localStorage.setItem("tid", res.data.tid)
       window.open(res.data.next_redirect_pc_url, "정기결제", '_blank')
+      dispatch(setLoginMember(newInfo))
     })
     .catch(err => console.log(err))
   }
@@ -333,7 +339,6 @@ export default function Premium(){
   const closeModal = () =>{
     setModal(false)
   }
-  const isPayOver = useSelector(state => state.payment)
   return(
     <>
       {modal ? <PaymentModal closeModal={closeModal}></PaymentModal>: ''}

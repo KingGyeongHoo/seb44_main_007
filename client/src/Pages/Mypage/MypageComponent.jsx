@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux'
 import { styled } from 'styled-components'
-import axios from 'axios'
 import userImage from '../../Images/user.JPG'
 import { Link } from 'react-router-dom';
 import AWS from 'aws-sdk'
@@ -9,10 +8,7 @@ import {setLoginMember} from "../../Redux/loginMemberReducer";
 const PremiumImg = "https://www.svgrepo.com/show/485696/diamond.svg" //다이아몬드 아이콘
 
 const MypageComponent = () => {
-    const memberId = localStorage.getItem('memberId')
     //유저 데이터 받아오기
-    const member = useSelector(state => state.loginMember.loginMember.info)
-    console.log(member)
     //이미지 수정
     const imgRef = useRef(null);
     const [profileImage,setProfileImage] = useState(userImage);
@@ -73,6 +69,8 @@ const MypageComponent = () => {
     //   };
 
     //데이터 수정
+    const memberInfo = useSelector(state => state.loginMember.loginMember)
+    const member = memberInfo.info
     const [isEdit, setIsEdit] = useState(false);
     const [updatedMember, setUpdatedMember] = useState(null);
 
@@ -90,7 +88,7 @@ const MypageComponent = () => {
       };
     const dispatch = useDispatch()
     const s3 = new AWS.S3()
-    const memberInfo = useSelector(state => state.loginMember.loginMember)
+
     const handleEditInfo = async () => {
         const newInfo = {...memberInfo, info: updatedMember}
         const jsonInfo = JSON.stringify(newInfo, null, 2)
@@ -271,7 +269,7 @@ const MypageComponent = () => {
                                 <input 
                                 type="text"
                                 name="address"
-                                value={updatedMember.addess}
+                                value={updatedMember.address}
                                 onChange={handleInputChange}/>
                             </CategoryInfo>
                             ) : (
@@ -281,7 +279,7 @@ const MypageComponent = () => {
                                 <p>{member.phone}</p>
                                 <p>{member.createdAt}</p>
                                 <p className={member.address ? 'address' : 'none'}>
-                                    {member.address? member.address : '주소를 입력해 주세요.'} 
+                                    {member.address ? member.address : '주소를 입력해 주세요.'} 
                                 </p>
                             </CategoryInfo>
                             )}

@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
 import rightArrow from '../../Images/right_arrow.png'
 import leftArrow from '../../Images/left_arrow.png'
-
-import axios from 'axios'
-import apiUrl from '../../API_URL';
-import AWS from 'aws-sdk'
 
 // component import
 import PieGraph from "./PieGraph";
@@ -39,59 +35,9 @@ function Analysis() {
     setLastmonthData(memberData.filter(el => el.date.slice(5, 7)/1 === month - 1 && (month === 1 ? el.date.slice(0, 4)/1 === year - 1 : el.date.slice(0, 4)/1 === year)))
   }, [month])
 
-  // get Data from Redux
-  // const initData = useSelector((state) => state.data.initData);
-  const initData = useSelector(state => state.loginMember.loginMember.trade)
-
-  // dataState
-  const [monthData, setMonthData] = useState([]); // 전체 데이터(이번달)
-  const [spend, setSpend] = useState(0); // 총 지출
-  const [income, setIncome] = useState(0); // 총 수입
-  const [spendData, setSpendData] = useState([]); // 지출 데이터
-  const [incomeData, setIncomeData] = useState([]); //수입 데이터
-
-
-  // 받아온 데이터를 설정한 달에 맞게 filter
-  useEffect(() => {
-    const filterData = initData.filter((it) => {
-      const date = new Date(it.date);
-      const datayear = date.getFullYear();
-      const datamonth = date.getMonth() + 1;
-
-      return datayear === year && datamonth === month;
-    });
-    setMonthData(filterData);
-  }, [initData, month, year]);
-
   // 수입,지출 총 금액 산정
   const totalProfitSelector = accountData.filter(el => el.type === "수입").reduce((acc, cur) => acc + cur.amount, 0);
   const totalExpendSelector = accountData.filter(el => el.type === "지출").reduce((acc, cur) => acc + cur.amount, 0);
-  const accountDataList = accountData;
-
-  useEffect(() => {
-    const filterData1 = monthData.reduce((acc, cur, idx) => {
-      if (cur.type === "지출") {
-        return (acc += cur.amount);
-      }
-      return (acc += 0);
-    }, 0);
-    setSpend(filterData1);
-    const filterData2 = monthData.reduce((acc, cur, idx) => {
-      if (cur.type === "수입") {
-        return (acc += cur.amount);
-      }
-      return (acc += 0);
-    }, 0);
-    setIncome(filterData2);
-    const filterData3 = monthData.filter((it) => {
-      return it.type === "지출";
-    });
-    setSpendData(filterData3);
-    const filterData4 = monthData.filter((it) => {
-      return it.type === "수입";
-    });
-    setIncomeData(filterData4);
-  }, [monthData]);
 
   // function
   const goToPrev = () => {

@@ -1,7 +1,7 @@
 import { styled } from 'styled-components'
 import { SignupButton } from '../Home/Home'
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {setLoginMember} from "../../Redux/loginMemberReducer";
 import AWS from 'aws-sdk';
@@ -104,11 +104,10 @@ const DirectLinkSpan = styled.span`
 `
 
 export default function LoginSignup({page}){
-  const [members, setMemebrs] = useState([])
+  const [members, setMembers] = useState([])
   const dispatch = useDispatch();
   const s3 = new AWS.S3();
   useEffect(() => {
-
     // S3에서 파일 읽기
     const params = { Bucket: 'buyrricade/members', Key: `${email}.json` };
 
@@ -118,7 +117,7 @@ export default function LoginSignup({page}){
       } else {
         const fileContent = result.Body.toString('utf-8');
         const parsedData = JSON.parse(fileContent);
-        setMemebrs(parsedData);
+        setMembers(parsedData);
       }
     });
   }, []);

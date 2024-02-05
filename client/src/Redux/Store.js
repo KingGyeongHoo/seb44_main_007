@@ -10,6 +10,7 @@ import { wishListReducer, useableReducer } from './wishlist_reducer';
 import paymentReducer from './payment_reducer'; // 새로운 slice를 추가합니다.
 import loginMemberReducer from './loginMemberReducer'
 import payInfoReducer from './payInfo_reducer'
+import thunk from 'redux-thunk';
 
 const persistConfig = {
   key: "root", // localStorage key 
@@ -36,6 +37,7 @@ const persReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persReducer,
+  middleware: [thunk]
 });
 
 export default store;

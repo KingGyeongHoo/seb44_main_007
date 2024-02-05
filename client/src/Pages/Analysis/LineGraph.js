@@ -1,10 +1,9 @@
-import React, { useState, useEffect, PureComponent } from "react";
+import React from "react";
 import {
   ComposedChart,
   Line,
   Bar,
   XAxis,
-  Label,
   LabelList,
   ResponsiveContainer
 } from 'recharts';
@@ -16,59 +15,6 @@ const GraphWrap = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-`;
-const DataWrap = styled.div`
-  position: relative;
-  width: 8.3%;
-  height: 100%;
-`;
-const GraphTop = styled.div`
-  height: 80%;
-  width: 16px;
-  background-color: rgb(25, 25, 25);
-  margin: auto;
-  position: relative;
-  border-radius: 3px 3px 0 0;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: ${(props) => props.value}px;
-    left: 50%;
-    height: 7px;
-    width: 7px;
-    background-color: #C5FF78;
-    border-radius: 50%;
-    transform: translateX(-50%);
-  }
-`;
-const GraphBottom = styled.div`
-  border-top: 1px solid rgb(25, 25, 25);
-  width: 100%;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  > p {
-    color: rgb(160, 160, 160);
-    font-size: 14px;
-    margin-top: 7px;
-    &:last-child {
-      color: White;
-      font-size: 12px;
-    margin-top: 4px;
-    }
-  }
-`;
-
-const LineConnector = styled.svg`
-  position: fixed;
-  top: 746px;
-  left: 389px;
-  height: 100%;
-  width: 71.3%;
-  z-index: 2;
 `;
 
 const LineGraph = ({selectedMonth}) => {
@@ -104,7 +50,6 @@ const LineGraph = ({selectedMonth}) => {
       }
     )
   })
-  const maxDataValue = Math.max(...data);
 
   const CustomizedLabel = (props) => {
     const { x, y, value } = props;
@@ -115,8 +60,6 @@ const LineGraph = ({selectedMonth}) => {
       </text>
     );
   };
-
-  const formatXAxis  = (tickItem => tickItem.toLocaleString())
 
   return (
     <GraphWrap>

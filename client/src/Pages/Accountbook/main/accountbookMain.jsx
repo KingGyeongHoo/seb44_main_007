@@ -7,10 +7,7 @@ import TargetAmountModal from "./targetAmountModal";
 // import { ko } from "date-fns/esm/locale";
 import 'react-datepicker/dist/react-datepicker.css';
 import { Calender } from './calender';
-import leftIcon from '../../../Images/left_arrow.png'
-import rightIcon from '../../../Images/right_arrow.png'
 import EditDelete from './edit,delete';
-import AWS from 'aws-sdk'
 
 const AccountbookMain = () => {
 
@@ -34,7 +31,6 @@ const AccountbookMain = () => {
   };
   //유저 정보 받아오기
   const memberInfo = useSelector(state => state.loginMember.loginMember)
-  console.log(memberInfo.info)
   const memberData = memberInfo.trade
   const memberName = memberInfo.info.name
   //데이터 받아오기
