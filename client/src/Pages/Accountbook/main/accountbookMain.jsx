@@ -34,6 +34,7 @@ const AccountbookMain = () => {
   };
   //유저 정보 받아오기
   const memberInfo = useSelector(state => state.loginMember.loginMember)
+  console.log(memberInfo.info)
   const memberData = memberInfo.trade
   const memberName = memberInfo.info.name
   //데이터 받아오기
@@ -49,7 +50,6 @@ const AccountbookMain = () => {
   const totalExpendSelector = useSelector((state) => state.totalExpend);
   
   const [activeTab, setActiveTab] = useState(0);
-
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);

@@ -9,6 +9,7 @@ import idReducer from './id_reducer'; // 새로운 slice를 추가합니다.
 import { wishListReducer, useableReducer } from './wishlist_reducer';
 import paymentReducer from './payment_reducer'; // 새로운 slice를 추가합니다.
 import loginMemberReducer from './loginMemberReducer'
+import payInfoReducer from './payInfo_reducer'
 
 const persistConfig = {
   key: "root", // localStorage key 
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
   wishlist: wishListReducer,
   useAble: useableReducer,
   payment: paymentReducer,
-  loginMember: loginMemberReducer
+  loginMember: loginMemberReducer,
+  payInfo: payInfoReducer
 });
 
 const persReducer = persistReducer(persistConfig, rootReducer);

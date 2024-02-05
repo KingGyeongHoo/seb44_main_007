@@ -1,9 +1,10 @@
 import { styled } from "styled-components";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../Wishlist/Wishlist";
 import { ModalBackground, ModalContainer, ModalDiv } from "../Wishlist/Modal"
 import { useNavigate } from 'react-router-dom';
+import { setPayInfo } from '../../Redux/payInfo_reducer'
 import axios from "axios"
 
 const PremiumContainer = styled.div`
@@ -212,7 +213,8 @@ const PaySpan = styled.span`
 `
 const PaymentModal = ({closeModal}) => {
   const [onPayment, setOnPayment] = useState(false)
-  const [payInfo, setPayInfo] = useState({next_redirect_pc_url: "",tid: ""})
+  const dispatch = useDispatch()
+  const [info, setInfo] = useState({next_redirect_pc_url: "",tid: ""})
   
   const kakaoPayment = () => {
     const params = {
@@ -230,18 +232,14 @@ const PaymentModal = ({closeModal}) => {
       }
     axios.post('https://kapi.kakao.com/v1/payment/ready', params, {
       headers: {
-        Authorization: process.env.REACT_APP_KakaoAK,
+        Authorization: "KakaoAK 6ebdcc5b32202a296e8859a0f0e99f5f",
         "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
       },
     })
     .then(res => {
-      console.log(res)
-      setPayInfo({next_redirect_pc_url: res.data.next_redirect_pc_url, tid: res.data.tid})
-    })
-    .then(res => {
-      localStorage.setItem('tid', payInfo.tid)
-      localStorage.setItem('next_redirect_pc_url', payInfo.next_redirect_pc_url)
-      window.open(payInfo.next_redirect_pc_url, "정기결제", '_blank')
+      console.log(res.data.tid)
+      localStorage.setItem("tid", res.data.tid)
+      window.open(res.data.next_redirect_pc_url, "정기결제", '_blank')
     })
     .catch(err => console.log(err))
   }

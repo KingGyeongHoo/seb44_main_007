@@ -119,6 +119,7 @@ const LineGraph = ({selectedMonth}) => {
   const formatXAxis  = (tickItem => tickItem.toLocaleString())
 
   return (
+    <GraphWrap>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={data}
@@ -135,6 +136,7 @@ const LineGraph = ({selectedMonth}) => {
           <Line type="monotone" dataKey="amount" stroke="#ff7300" />
         </ComposedChart>
       </ResponsiveContainer>
+    </GraphWrap>
   );
 };
 

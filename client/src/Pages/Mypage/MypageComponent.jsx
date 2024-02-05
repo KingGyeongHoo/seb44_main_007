@@ -12,7 +12,7 @@ const MypageComponent = () => {
     const memberId = localStorage.getItem('memberId')
     //유저 데이터 받아오기
     const member = useSelector(state => state.loginMember.loginMember.info)
-
+    console.log(member)
     //이미지 수정
     const imgRef = useRef(null);
     const [profileImage,setProfileImage] = useState(userImage);
@@ -139,7 +139,7 @@ const MypageComponent = () => {
     };
 
     const unsubscribe = () => {
-        const newInfo = {...memberInfo, info: {...memberInfo.info, premiun: false}}
+        const newInfo = {...memberInfo, info: {...memberInfo.info, premium: false}}
         const jsonInfo = JSON.stringify(newInfo, null, 2)
         const params = {
         Bucket: 'buyrricade',
@@ -152,7 +152,6 @@ const MypageComponent = () => {
             console.error('Error uploading file:', err);
         } else {
             dispatch(setLoginMember(newInfo));
-            window.location.reload()
         }
         });
     };
