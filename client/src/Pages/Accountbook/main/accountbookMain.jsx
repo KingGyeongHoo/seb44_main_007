@@ -32,7 +32,7 @@ const AccountbookMain = () => {
   //유저 정보 받아오기
   const memberInfo = useSelector(state => state.loginMember.loginMember)
   const memberData = memberInfo.trade
-  const memberName = memberInfo.info.name
+  const memberName = memberInfo.info.name ? memberInfo.info.name : ""
   //데이터 받아오기
   const currentDate = selectedDate.selectedDate;
   const [accountData, setAccountData] = useState(memberData.filter(el => el.date.slice(0, 7) === currentDate.slice(0,7) ))

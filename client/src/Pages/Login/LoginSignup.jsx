@@ -245,18 +245,23 @@ export default function LoginSignup({page}){
     });
   }
 
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth()+1
+  const day = date.getDate()
+  const today = `${year}년 ${month}월 ${day}일`
   // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
   const signup = () => {
     const memberInfo = {
-      email: email,
       password: password,
       name: nickname,
       phone: phonenum,
       imageURL: 'https://www.svgrepo.com/show/362137/profile.svg',
+      createdAt: today,
       premium: null,
       address: ''
     }
-    const jsonInfo = JSON.stringify([...members, memberInfo], null, 2)
+    const jsonInfo = JSON.stringify({email: email, info:memberInfo, trade:[], goal: 0, wishList: []}, null, 2)
     const params = {
       Bucket: 'buyrricade',
       Key: `members/${email}.json`, // 업로드할 때 사용한 파일 경로 및 이름

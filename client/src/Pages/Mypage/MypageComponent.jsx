@@ -120,8 +120,20 @@ const MypageComponent = () => {
     };
 
     const confirmWithdrawal = () => {
+        const params = {
+            Bucket: 'buyrricade',
+            Key: `members/${memberInfo.email}.json`,
+        };
+    
+        s3.deleteObject(params, (err, data) => {
+            if (err) {
+              console.error('Error deleting file:', err.message); // 오류 메시지 출력
+            } else {
+                alert('탈퇴되었습니다.');
+            }
+        })
+        localStorage.clear()
         setModalIsOpen(false);
-        alert('탈퇴되었습니다.');
         window.location.href = '/';
     };
 
@@ -256,7 +268,7 @@ const MypageComponent = () => {
                                 <input
                                 type="text"
                                 name="email"
-                                value={updatedMember.email}
+                                value={memberInfo.email}
                                 onChange={handleInputChange}
                                 />
                                 <input
