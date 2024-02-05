@@ -246,6 +246,7 @@ const PaymentModal = ({closeModal}) => {
       localStorage.setItem("tid", res.data.tid)
       window.open(res.data.next_redirect_pc_url, "정기결제", '_blank')
       dispatch(setLoginMember(newInfo))
+      closeModal()
     })
     .catch(err => console.log(err))
   }
@@ -332,9 +333,14 @@ export default function Premium(){
     }
   ]
 
+  const isPremium = useSelector((state) => state.loginMember.loginMember.info.premium);
   const[modal, setModal] = useState(false)
   const openModal = () =>{
-    setModal(true)
+    if(isPremium){
+      alert("이미 가입한 회원입니다!")
+    } else{
+      setModal(true)
+    }
   }
   const closeModal = () =>{
     setModal(false)
