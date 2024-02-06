@@ -48,6 +48,7 @@ export default function Paying() {
           } else {
             dispatch(setLoginMember(newInfo))
             localStorage.removeItem("tid");
+            alert("프리미엄 가입 완료")
             window.close()
           }
         })
