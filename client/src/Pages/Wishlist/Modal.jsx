@@ -204,7 +204,16 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
               <LimitInput
                 type='input'
                 value={addPrice}
-                onChange={(e) => setAddPrice(e.target.value)}
+                onChange={(e) => {
+                  const input = e.target.value;
+                  const regex = /^\d+$/; // 숫자로만 이루어진 문자열을 나타내는 정규 표현식
+              
+                  if (!regex.test(input)) {
+                      alert('금액은 숫자만 입력할 수 있습니다');
+                  } else {
+                      setAddPrice(input);
+                  }
+              }}
                 fontsize='1rem'
                 placeholder='금액을 입력하세요'
                 ></LimitInput>
