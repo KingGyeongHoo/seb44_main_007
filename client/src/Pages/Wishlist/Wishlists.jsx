@@ -145,7 +145,7 @@ const WishLists = ({ list, index, moveList, editFunc, avail }) => {
           <ListSpan>{list.wishlistName}</ListSpan>
         </ListSpanDiv>
         <ListSpanDiv>
-          <ListSpan>\{list.price.toLocaleString()}</ListSpan>
+          <ListSpan>\{list.price ? list.price.toLocaleString() : 0}</ListSpan>
         </ListSpanDiv>
         <ListSpanDiv>
           <CategoryCircle bgcolor={Palette[list.category]}></CategoryCircle>
